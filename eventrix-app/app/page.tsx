@@ -1,38 +1,27 @@
-import Image from "next/image";
+import { WebGLShader } from "@/components/ui/web-gl-shader";
+import { LiquidButton } from '@/components/ui/liquid-glass-button' 
 
 export default function Home() {
   return (
-    <div className="landing-page">
-      <header>
-        <div className="container">
-          <a href="#" className="logo">Your <b>Website</b></a>
-          <ul className="links">
-            <li>Home</li>
-            <li>About Us</li>
-            <li>Work</li>
-            <li>Info</li>
-            <li>Get Started</li>
-          </ul>
-        </div>
-      </header>
-      <div className="content">
-        <div className="container">
-          <div className="info">
-            <h1>Looking For Inspiration</h1>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus odit nihil ullam nesciunt quidem iste, Repellendus odit nihil</p>
-            <button>Button name</button>
-          </div>
-          <div className="image">
-            <Image
-              src="https://i.postimg.cc/65QxYYzh/001234.png"
-              alt="Landing page illustration"
-              width={500}
-              height={500}
-              priority
-            />
-          </div>
-        </div>
-      </div>
+    <div className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden">
+      <WebGLShader/> 
+      <div className="relative border border-[#27272a] p-2 w-full mx-auto max-w-3xl z-10">
+      <main className="relative border border-[#27272a] py-10 overflow-hidden">
+                <h1 className="mb-3 text-white text-center text-7xl font-extrabold tracking-tighter md:text-[clamp(2rem,8vw,7rem)]">Design is Everything</h1>
+                <p className="text-white/60 px-6 text-center text-xs md:text-sm lg:text-lg">Unleashing creativity through bold visuals, seamless interfaces, and limitless possibilities.</p>
+                <div className="my-8 flex items-center justify-center gap-1">
+                    <span className="relative flex h-3 w-3 items-center justify-center">
+                        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-500 opacity-75"></span>
+                        <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500"></span>
+                    </span>
+                    <p className="text-xs text-green-500">Available for New Projects</p>
+                </div>
+                
+            <div className="flex justify-center"> 
+                <LiquidButton className="text-white border rounded-full" size={'xl'}>Let's Go</LiquidButton> 
+            </div> 
+            </main>
+            </div>
     </div>
   );
 }

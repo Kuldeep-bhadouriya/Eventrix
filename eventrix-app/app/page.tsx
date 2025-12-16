@@ -5,9 +5,9 @@ export default function Home() {
   return (
     <div className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden">
       <WebGLShader/> 
-      <div className="relative border border-[#27272a] p-2 w-full mx-auto max-w-3xl z-10">
-      <main className="relative border border-[#27272a] py-10 overflow-hidden">
-                <h1 className="mb-3 text-white text-center text-7xl font-extrabold tracking-tighter md:text-[clamp(2rem,8vw,7rem)]">Design is Everything</h1>
+      <div className="relative border border-[#27272a] p-3 w-full mx-auto max-w-6xl z-10">
+      <main className="relative border border-[#27272a] py-24 overflow-hidden">
+                <h1 className="mb-3 text-white text-center text-7xl font-extrabold tracking-tighter md:text-[clamp(2rem,8vw,7rem)]">Management is Everything</h1>
                 <p className="text-white/60 px-6 text-center text-xs md:text-sm lg:text-lg">Unleashing creativity through bold visuals, seamless interfaces, and limitless possibilities.</p>
                 <div className="my-8 flex items-center justify-center gap-1">
                     <span className="relative flex h-3 w-3 items-center justify-center">

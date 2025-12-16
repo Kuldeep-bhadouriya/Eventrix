@@ -144,12 +144,54 @@ body {
   color: var(--text-900);
   font-family: 'Sono', sans-serif;
   line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Better spacing for headings */
+h1, h2, h3, h4, h5, h6 {
+  margin-bottom: 0.75rem;
+  line-height: 1.2;
+}
+
+h1 {
+  margin-bottom: 1.5rem;
+}
+
+h2 {
+  margin-bottom: 1.25rem;
+}
+
+h3 {
+  margin-bottom: 1rem;
+}
+
+/* Better spacing for paragraphs */
+p {
+  margin-bottom: 1rem;
+}
+
+p:last-child {
+  margin-bottom: 0;
+}
+
+/* Better spacing for sections and divs */
+section {
+  margin-bottom: 2rem;
+}
+
+/* Better default line height for readability */
+body {
+  line-height: 1.6;
 }
 
 .dark body {
   background: var(--background-950);
   color: var(--text-50);
 }
+
+/* Remove duplicate body styling */
 
 /* Links */
 a {
@@ -163,19 +205,18 @@ a {
   outline-offset: 2px;
 }
 
-/* Improved text rendering */
-body {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
+/* Button default spacing */
+button {
+  margin: 0.25rem;
 }
 
 /* Container */
 .container {
-  padding-left: 15px;
-  padding-right: 15px;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
   margin-left: auto;
   margin-right: auto;
+  margin-bottom: 2rem;
 }
 /* Small */
 @media (min-width: 768px) {

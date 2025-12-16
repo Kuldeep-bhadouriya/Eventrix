@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { env } from "@/lib/env";
 import PreloaderWrapper from "@/components/preloader-wrapper";
+import { NavbarDock } from "@/components/navbar-dock";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -59,6 +60,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}
       >
+        <NavbarDock />
         <PreloaderWrapper>{children}</PreloaderWrapper>
       </body>
     </html>

@@ -2,8 +2,8 @@ import { LiquidButton } from '@/components/ui/liquid-glass-button';
 
 export function HeroSection() {
   return (
-    <div className="relative border border-[#27272a] p-3 w-full mx-auto max-w-6xl z-10">
-      <main className="relative border border-[#27272a] overflow-hidden px-8 md:px-12 lg:px-16 py-32 md:py-40 flex flex-col items-center gap-16 md:gap-18 lg:gap-20">
+    <div className="relative border border-[#27272a] !p-3 !pb-3 w-full mx-auto max-w-6xl z-10">
+      <main className="relative border border-[#27272a] overflow-hidden px-8 md:px-12 lg:px-16 py-32 md:py-40 !pb-24 md:!pb-5 flex flex-col items-center gap-16 md:gap-18 lg:gap-20">
         <div className="mx-auto flex max-w-5xl flex-col items-center text-center gap-6 md:gap-8">
           {/* Hero Headline */}
           <h1 className="text-white text-5xl font-extrabold tracking-tighter leading-tight md:text-6xl lg:text-7xl">
@@ -25,13 +25,10 @@ export function HeroSection() {
           </div>
           
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4"> 
-            <LiquidButton className="text-white border rounded-full" size={'xl'}>
+          <div className="flex items-center justify-center"> 
+            <LiquidButton className="text-white border rounded-full !px-20 text-lg font-semibold" size={'xl'}>
               Get Started
             </LiquidButton>
-            <button className="px-8 py-3 text-white/80 border border-white/20 rounded-full hover:bg-white/5 hover:text-white transition-all duration-300 text-base font-medium">
-              Explore Events
-            </button>
           </div>
         </div>
       </main>

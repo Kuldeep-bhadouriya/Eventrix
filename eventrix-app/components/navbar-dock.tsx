@@ -11,6 +11,7 @@ import {
 
 import { Dock, DockIcon, DockItem, DockLabel } from '@/components/ui/dock';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const navData = [
   {
@@ -59,17 +60,19 @@ const navData = [
 
 export function NavbarDock() {
   return (
-    <div className='fixed top-4 left-1/2 -translate-x-1/2 z-50 max-w-full'>
-      <Dock className='items-center py-2' panelHeight={52}>
-        {navData.map((item, idx) => (
-          <Link key={idx} href={item.href}>
-            <DockItem className='aspect-square rounded-full bg-gray-200 dark:bg-neutral-800'>
-              <DockLabel>{item.title}</DockLabel>
-              <DockIcon>{item.icon}</DockIcon>
-            </DockItem>
-          </Link>
-        ))}
-      </Dock>
-    </div>
+    <>
+      <div className='fixed top-4 left-1/2 -translate-x-1/2 z-50 max-w-full'>
+        <Dock className='items-center py-2' panelHeight={52}>
+          {navData.map((item, idx) => (
+            <Link key={idx} href={item.href}>
+              <DockItem className='aspect-square rounded-full bg-gray-200 dark:bg-neutral-800'>
+                <DockLabel>{item.title}</DockLabel>
+                <DockIcon>{item.icon}</DockIcon>
+              </DockItem>
+            </Link>
+          ))}
+        </Dock>
+      </div>
+    </>
   );
 }

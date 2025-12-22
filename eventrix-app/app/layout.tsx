@@ -24,6 +24,9 @@ export const metadata: Metadata = {
   },
   description: "Event management platform for seamless event experiences",
   metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
+  icons: {
+    icon: "/favicon.svg",
+  },
   openGraph: {
     title: env.NEXT_PUBLIC_APP_NAME,
     description: "Event management platform for seamless event experiences",

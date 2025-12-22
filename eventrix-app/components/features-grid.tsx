@@ -19,7 +19,7 @@ export function FeaturesGrid() {
   ];
 
   return (
-    <div className="w-full max-w-5xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 mt-12 md:mt-16 lg:mt-20 z-10">
+    <div className="w-full max-w-5xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 mt-16 md:mt-20 lg:mt-24 z-10">
       {features.map((feature, index) => (
         <div 
           key={index}

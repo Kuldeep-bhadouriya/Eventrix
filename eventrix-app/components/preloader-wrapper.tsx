@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useCallback, useEffect } from "react"
+import { usePathname } from "next/navigation"
 import Preloader from "@/components/ui/preloader"
 
 export default function PreloaderWrapper({
@@ -8,21 +9,21 @@ export default function PreloaderWrapper({
 }: {
   children: React.ReactNode
 }) {
-  const [showPreloader, setShowPreloader] = useState(true)
-  const [isMounted, setIsMounted] = useState(false)
+  const pathname = usePathname()
+  const [showPreloader, setShowPreloader] = useState(false)
 
   useEffect(() => {
-    setIsMounted(true)
-  }, [])
+    // Show preloader only on home page
+    if (pathname === "/") {
+      setShowPreloader(true)
+    } else {
+      setShowPreloader(false)
+    }
+  }, [pathname])
 
   const handleComplete = useCallback(() => {
     setShowPreloader(false)
   }, [])
-
-  // Don't show preloader on server-side
-  if (!isMounted) {
-    return <>{children}</>
-  }
 
   return (
     <>

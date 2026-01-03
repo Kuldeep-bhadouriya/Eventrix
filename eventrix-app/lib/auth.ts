@@ -16,6 +16,7 @@ declare module "next-auth" {
       name: string;
       role: UserRole;
       avatar?: string | null;
+      profileCompleted: boolean;
     };
   }
 
@@ -25,6 +26,7 @@ declare module "next-auth" {
     name: string;
     role: UserRole;
     avatar?: string | null;
+    profileCompleted: boolean;
   }
 }
 
@@ -33,6 +35,7 @@ declare module "next-auth/jwt" {
     id: string;
     role: UserRole;
     avatar?: string | null;
+    profileCompleted: boolean;
   }
 }
 
@@ -106,6 +109,7 @@ export const authOptions: NextAuthOptions = {
           name: user.name,
           role: user.role,
           avatar: user.avatar,
+          profileCompleted: user.profileCompleted || false,
         };
       },
     }),
@@ -122,6 +126,7 @@ export const authOptions: NextAuthOptions = {
           avatar: profile.picture,
           role: UserRole.STUDENT, // Default role for OAuth users
           emailVerified: profile.email_verified ? new Date() : null,
+          profileCompleted: false, // New users need to complete profile
         };
       },
     }),
@@ -129,11 +134,11 @@ export const authOptions: NextAuthOptions = {
 
   // Configure custom pages
   pages: {
-    signIn: "/auth/signin",
-    signOut: "/auth/signout",
+    signIn: "/auth/login",
+    signOut: "/auth/login",
     error: "/auth/error",
     verifyRequest: "/auth/verify-request",
-    newUser: "/dashboard", // Redirect new users to dashboard
+    newUser: "/auth/complete-profile", // Redirect new users to complete profile
   },
 
   // Configure callbacks
@@ -145,6 +150,7 @@ export const authOptions: NextAuthOptions = {
         token.id = user.id;
         token.role = user.role;
         token.avatar = user.avatar;
+        token.profileCompleted = user.profileCompleted || false;
       }
 
       // Handle Google OAuth sign in
@@ -158,6 +164,7 @@ export const authOptions: NextAuthOptions = {
           token.id = existingUser.id;
           token.role = existingUser.role;
           token.avatar = existingUser.avatar;
+          token.profileCompleted = existingUser.profileCompleted;
         } else {
           // Create new user for OAuth
           const newUser = await prisma.user.create({
@@ -167,11 +174,13 @@ export const authOptions: NextAuthOptions = {
               avatar: user.avatar,
               role: UserRole.STUDENT,
               emailVerified: new Date(),
+              profileCompleted: false,
             },
           });
           token.id = newUser.id;
           token.role = newUser.role;
           token.avatar = newUser.avatar;
+          token.profileCompleted = newUser.profileCompleted;
         }
       }
 
@@ -179,6 +188,14 @@ export const authOptions: NextAuthOptions = {
       if (trigger === "update" && session) {
         token.name = session.name;
         token.avatar = session.avatar;
+        // Refresh profile completion status from database
+        const user = await prisma.user.findUnique({
+          where: { id: token.id },
+          select: { profileCompleted: true },
+        });
+        if (user) {
+          token.profileCompleted = user.profileCompleted;
+        }
       }
 
       return token;
@@ -190,6 +207,7 @@ export const authOptions: NextAuthOptions = {
         session.user.id = token.id;
         session.user.role = token.role;
         session.user.avatar = token.avatar;
+        session.user.profileCompleted = token.profileCompleted;
       }
       return session;
     },

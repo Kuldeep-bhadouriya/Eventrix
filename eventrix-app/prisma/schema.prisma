@@ -38,6 +38,14 @@ model User {
   role          UserRole  @default(STUDENT)
   avatar        String?
   emailVerified DateTime?
+  
+  // Profile completion fields
+  profileCompleted Boolean  @default(false)
+  phone         String?
+  college       String?
+  yearOfStudy   String?
+  department    String?
+  
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
@@ -52,6 +60,7 @@ model User {
   // Indexes
   @@index([email])
   @@index([role])
+  @@index([profileCompleted])
   @@map("users")
 }
 

@@ -13,6 +13,7 @@ const routeAccessRules: Record<string, UserRole[]> = {
 // Public routes that don't require authentication
 const publicRoutes = [
   "/",
+  "/auth/login",
   "/auth/signin",
   "/auth/signup",
   "/auth/error",
@@ -91,7 +92,7 @@ export async function middleware(request: NextRequest) {
 
   // If no token, redirect to sign in
   if (!token) {
-    const signInUrl = new URL("/auth/signin", request.url);
+    const signInUrl = new URL("/auth/login", request.url);
     signInUrl.searchParams.set("callbackUrl", pathname);
     return NextResponse.redirect(signInUrl);
   }

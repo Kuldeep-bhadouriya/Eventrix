@@ -66,7 +66,9 @@ export default function RootLayout({
       >
         <SessionProvider>
           <NavbarDock />
-          <PreloaderWrapper>{children}</PreloaderWrapper>
+          <div>
+            <PreloaderWrapper>{children}</PreloaderWrapper>
+          </div>
         </SessionProvider>
       </body>
     </html>

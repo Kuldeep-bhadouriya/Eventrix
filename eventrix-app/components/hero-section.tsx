@@ -3,7 +3,7 @@ import { LiquidButton } from '@/components/ui/liquid-glass-button';
 export function HeroSection() {
   return (
     <div className="relative border border-[#27272a] !p-3 !pb-3 w-full mx-auto max-w-6xl z-10">
-      <main className="relative border border-[#27272a] overflow-hidden px-8 md:px-12 lg:px-16 py-32 md:py-40 !pb-24 md:!pb-5 flex flex-col items-center gap-16 md:gap-18 lg:gap-20">
+      <main className="relative border border-[#27272a] overflow-hidden px-8 md:px-12 lg:px-16 py-16 md:py-20 !pb-16 md:!pb-16 flex flex-col items-center gap-12 md:gap-14">
         <div className="mx-auto flex max-w-5xl flex-col items-center text-center gap-6 md:gap-8">
           {/* Hero Headline */}
           <h1 className="text-white text-5xl font-extrabold tracking-tighter leading-tight md:text-6xl lg:text-7xl">

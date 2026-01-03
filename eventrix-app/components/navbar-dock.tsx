@@ -61,7 +61,7 @@ const navData = [
 export function NavbarDock() {
   return (
     <>
-      <div className='fixed top-4 left-1/2 -translate-x-1/2 z-50 max-w-full'>
+      <div className='fixed top-4 md:top-0 left-1/2 -translate-x-1/2 z-50 max-w-full'>
         <Dock className='items-center py-2' panelHeight={52}>
           {navData.map((item, idx) => (
             <Link key={idx} href={item.href}>

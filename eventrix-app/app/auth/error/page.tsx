@@ -68,7 +68,7 @@ function ErrorContent() {
           {/* Action Buttons */}
           <div className="space-y-3">
             <Link
-              href="/auth/signin"
+              href="/auth/login"
               className="block w-full py-3 px-4 bg-white text-purple-600 font-semibold rounded-lg hover:bg-white/90 focus:outline-none focus:ring-2 focus:ring-white/50 transition text-center"
             >
               Back to Sign In

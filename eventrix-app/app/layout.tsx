@@ -4,6 +4,7 @@ import "./globals.css";
 import { env } from "@/lib/env";
 import PreloaderWrapper from "@/components/preloader-wrapper";
 import { NavbarDock } from "@/components/navbar-dock";
+import { SessionProvider } from "@/components/providers/session-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -63,8 +64,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}
       >
-        <NavbarDock />
-        <PreloaderWrapper>{children}</PreloaderWrapper>
+        <SessionProvider>
+          <NavbarDock />
+          <PreloaderWrapper>{children}</PreloaderWrapper>
+        </SessionProvider>
       </body>
     </html>
   );

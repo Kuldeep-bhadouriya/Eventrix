@@ -92,16 +92,6 @@ function hasAccess(userRole: UserRole, requiredRoles: UserRole[]): boolean {
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Allow public routes without authentication
-  if (isPublicRoute(pathname)) {
-    return NextResponse.next();
-  }
-
-  // Allow public API routes
-  if (isPublicApiRoute(pathname)) {
-    return NextResponse.next();
-  }
-
   // Allow static files and Next.js internals
   if (
     pathname.startsWith("/_next") ||
@@ -110,6 +100,16 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith("/assets") ||
     pathname.includes(".") // Files with extensions (e.g., .js, .css, .png)
   ) {
+    return NextResponse.next();
+  }
+
+  // Allow public routes without authentication
+  if (isPublicRoute(pathname)) {
+    return NextResponse.next();
+  }
+
+  // Allow public API routes
+  if (isPublicApiRoute(pathname)) {
     return NextResponse.next();
   }
 

@@ -1,0 +1,170 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// Enum Definitions
+enum UserRole {
+  STUDENT
+  ORGANIZER
+  ADMIN
+}
+
+enum EventStatus {
+  DRAFT
+  PUBLISHED
+  CLOSED
+  COMPLETED
+}
+
+enum RegistrationStatus {
+  REGISTERED
+  ATTENDED
+  CANCELLED
+}
+
+// User Model
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  password      String?
+  role          UserRole  @default(STUDENT)
+  avatar        String?
+  emailVerified DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  organizer     Organizer?
+  registrations Registration[]
+  certificates  Certificate[]
+  notifications Notification[]
+
+  // Indexes
+  @@index([email])
+  @@index([role])
+  @@map("users")
+}
+
+// Organizer Model
+model Organizer {
+  id               String   @id @default(cuid())
+  userId           String   @unique
+  organizationName String
+  logo             String?
+  bio              String?
+  socialLinks      Json?
+  verified         Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  // Relations
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  events Event[]
+
+  // Indexes
+  @@index([userId])
+  @@index([verified])
+  @@map("organizers")
+}
+
+// Event Model
+model Event {
+  id              String      @id @default(cuid())
+  title           String
+  description     String      @db.Text
+  date            DateTime
+  time            String
+  endTime         String?
+  venue           String
+  capacity        Int
+  registeredCount Int         @default(0)
+  organizerId     String
+  category        String
+  tags            String[]
+  bannerUrl       String?
+  status          EventStatus @default(DRAFT)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  // Relations
+  organizer     Organizer      @relation(fields: [organizerId], references: [id], onDelete: Cascade)
+  registrations Registration[]
+  certificates  Certificate[]
+
+  // Indexes
+  @@index([organizerId])
+  @@index([status])
+  @@index([date])
+  @@index([category])
+  @@map("events")
+}
+
+// Registration Model
+model Registration {
+  id           String             @id @default(cuid())
+  userId       String
+  eventId      String
+  registeredAt DateTime           @default(now())
+  status       RegistrationStatus @default(REGISTERED)
+  checkInTime  DateTime?
+
+  // Relations
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  // Indexes
+  @@unique([userId, eventId])
+  @@index([userId])
+  @@index([eventId])
+  @@index([status])
+  @@map("registrations")
+}
+
+// Certificate Model
+model Certificate {
+  id          String   @id @default(cuid())
+  userId      String
+  eventId     String
+  templateUrl String?
+  downloadUrl String?
+  issuedAt    DateTime @default(now())
+  createdAt   DateTime @default(now())
+
+  // Relations
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  // Indexes
+  @@unique([userId, eventId])
+  @@index([userId])
+  @@index([eventId])
+  @@map("certificates")
+}
+
+// Notification Model
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  message   String   @db.Text
+  type      String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Indexes
+  @@index([userId])
+  @@index([read])
+  @@index([createdAt])
+  @@map("notifications")
+}

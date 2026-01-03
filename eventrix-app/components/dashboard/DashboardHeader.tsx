@@ -34,7 +34,7 @@ export function DashboardHeader({
           <UserMenu
             name={isLoading ? "Loading..." : (user?.name ?? null)}
             email={user?.email ?? null}
-            imageUrl={user?.image ?? null}
+            imageUrl={user?.avatar ?? null}
           />
         </div>
       </div>

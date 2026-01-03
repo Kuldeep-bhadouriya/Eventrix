@@ -158,7 +158,7 @@ function LoginForm() {
                 type="email"
                 placeholder="you@example.com"
                 autoComplete="email"
-                className="border-white/40 bg-white/10 placeholder:text-white/50 text-white py-3 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 focus:bg-white/15 transition-all duration-200"
+                className="glass-effect h-11 border-white/30 bg-white/10 text-white placeholder:text-white/50 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-200"
                 disabled={isLoading || isGoogleLoading}
                 {...register("email")}
               />
@@ -176,7 +176,7 @@ function LoginForm() {
                 type="password"
                 placeholder="Enter your password"
                 autoComplete="current-password"
-                className="border-white/40 bg-white/10 placeholder:text-white/50 text-white py-3 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 focus:bg-white/15 transition-all duration-200"
+                className="glass-effect h-11 border-white/30 bg-white/10 text-white placeholder:text-white/50 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-200"
                 disabled={isLoading || isGoogleLoading}
                 {...register("password")}
               />

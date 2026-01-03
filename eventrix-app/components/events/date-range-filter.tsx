@@ -34,7 +34,7 @@ export function DateRangeFilter({
             value="all"
             checked={value === 'all'}
             onChange={(e) => onChange(e.target.value as DateFilter)}
-            className="h-4 w-4 border-gray-300 text-primary focus:ring-primary"
+            className="h-4 w-4 border-gray-300 text-primary focus:ring-primary dark:border-gray-600"
           />
           <span className="text-sm">All Upcoming</span>
         </label>
@@ -46,7 +46,7 @@ export function DateRangeFilter({
             value="today"
             checked={value === 'today'}
             onChange={(e) => onChange(e.target.value as DateFilter)}
-            className="h-4 w-4 border-gray-300 text-primary focus:ring-primary"
+            className="h-4 w-4 border-gray-300 text-primary focus:ring-primary dark:border-gray-600"
           />
           <span className="text-sm">Today</span>
         </label>
@@ -58,7 +58,7 @@ export function DateRangeFilter({
             value="week"
             checked={value === 'week'}
             onChange={(e) => onChange(e.target.value as DateFilter)}
-            className="h-4 w-4 border-gray-300 text-primary focus:ring-primary"
+            className="h-4 w-4 border-gray-300 text-primary focus:ring-primary dark:border-gray-600"
           />
           <span className="text-sm">This Week</span>
         </label>
@@ -70,7 +70,7 @@ export function DateRangeFilter({
             value="month"
             checked={value === 'month'}
             onChange={(e) => onChange(e.target.value as DateFilter)}
-            className="h-4 w-4 border-gray-300 text-primary focus:ring-primary"
+            className="h-4 w-4 border-gray-300 text-primary focus:ring-primary dark:border-gray-600"
           />
           <span className="text-sm">This Month</span>
         </label>
@@ -82,7 +82,7 @@ export function DateRangeFilter({
             value="custom"
             checked={value === 'custom'}
             onChange={(e) => onChange(e.target.value as DateFilter)}
-            className="h-4 w-4 border-gray-300 text-primary focus:ring-primary"
+            className="h-4 w-4 border-gray-300 text-primary focus:ring-primary dark:border-gray-600"
           />
           <span className="text-sm">Custom Range</span>
         </label>
@@ -99,7 +99,7 @@ export function DateRangeFilter({
               id="dateFrom"
               value={dateFrom || ''}
               onChange={(e) => onDateFromChange(e.target.value)}
-              className="mt-1 flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="mt-1 flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
             />
           </div>
           <div>
@@ -111,7 +111,7 @@ export function DateRangeFilter({
               id="dateTo"
               value={dateTo || ''}
               onChange={(e) => onDateToChange(e.target.value)}
-              className="mt-1 flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="mt-1 flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
             />
           </div>
         </div>

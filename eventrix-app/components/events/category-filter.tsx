@@ -18,7 +18,7 @@ export function CategoryFilter({ value, onChange }: CategoryFilterProps) {
         id="category"
         value={value}
         onChange={(e) => onChange(e.target.value as EventCategory | '')}
-        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-gray-900 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
       >
         <option value="">All Categories</option>
         {EVENT_CATEGORIES.map((category) => (

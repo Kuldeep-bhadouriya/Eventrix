@@ -5,21 +5,12 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LiquidButton } from "@/components/ui/liquid-glass-button";
 import { WebGLShader } from "@/components/ui/web-gl-shader";
-
-const profileCompletionSchema = z.object({
-  phone: z.string().min(10, "Phone number must be at least 10 digits"),
-  college: z.string().min(2, "College name is required"),
-  yearOfStudy: z.string().min(1, "Year of study is required"),
-  department: z.string().optional(),
-});
-
-type ProfileCompletionFormData = z.infer<typeof profileCompletionSchema>;
+import { profileCompletionSchema, ProfileCompletionFormData } from "@/lib/validation-schemas";
 
 export default function CompleteProfilePage() {
   const router = useRouter();
@@ -64,8 +55,8 @@ export default function CompleteProfilePage() {
       // Update session to reflect profile completion
       await update();
 
-      // Redirect to events page
-      router.push("/events");
+      // Redirect to home page
+      router.push("/");
     } catch (error: any) {
       setErrorMessage(error.message || "An unexpected error occurred");
     } finally {
@@ -131,58 +122,69 @@ export default function CompleteProfilePage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="college" className="text-sm font-medium text-white font-sans">
-                College/University <span className="text-red-400">*</span>
+              <Label htmlFor="collegeRollNumber" className="text-sm font-medium text-white font-sans">
+                College Roll Number <span className="text-red-400">*</span>
               </Label>
               <Input
-                id="college"
+                id="collegeRollNumber"
                 type="text"
-                placeholder="Your College Name"
-                autoComplete="organization"
+                placeholder="0905CS241148"
                 className="border-white/40 bg-white/10 placeholder:text-white/50 text-white py-3 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 focus:bg-white/15 transition-all duration-200"
                 disabled={isLoading}
-                {...register("college")}
+                {...register("collegeRollNumber")}
               />
-              {errors.college && (
-                <p className="text-sm text-red-400">{errors.college.message}</p>
+              {errors.collegeRollNumber && (
+                <p className="text-sm text-red-400">{errors.collegeRollNumber.message}</p>
               )}
+              <p className="text-xs text-white/60">Format: 0905 + Department Code + Year + Roll Number</p>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="yearOfStudy" className="text-sm font-medium text-white font-sans">
-                Year of Study <span className="text-red-400">*</span>
+              <Label htmlFor="semester" className="text-sm font-medium text-white font-sans">
+                Semester <span className="text-red-400">*</span>
               </Label>
               <select
-                id="yearOfStudy"
+                id="semester"
                 className="w-full border-white/40 bg-white/10 text-white py-3 px-3 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-blue-400 focus:bg-white/15 transition-all duration-200"
                 disabled={isLoading}
-                {...register("yearOfStudy")}
+                {...register("semester")}
               >
-                <option value="" className="bg-gray-900">Select Year</option>
-                <option value="1st Year" className="bg-gray-900">1st Year</option>
-                <option value="2nd Year" className="bg-gray-900">2nd Year</option>
-                <option value="3rd Year" className="bg-gray-900">3rd Year</option>
-                <option value="4th Year" className="bg-gray-900">4th Year</option>
-                <option value="Graduate" className="bg-gray-900">Graduate</option>
-                <option value="Postgraduate" className="bg-gray-900">Postgraduate</option>
+                <option value="" className="bg-gray-900">Select Semester</option>
+                <option value="1" className="bg-gray-900">Semester 1</option>
+                <option value="2" className="bg-gray-900">Semester 2</option>
+                <option value="3" className="bg-gray-900">Semester 3</option>
+                <option value="4" className="bg-gray-900">Semester 4</option>
+                <option value="5" className="bg-gray-900">Semester 5</option>
+                <option value="6" className="bg-gray-900">Semester 6</option>
+                <option value="7" className="bg-gray-900">Semester 7</option>
+                <option value="8" className="bg-gray-900">Semester 8</option>
               </select>
-              {errors.yearOfStudy && (
-                <p className="text-sm text-red-400">{errors.yearOfStudy.message}</p>
+              {errors.semester && (
+                <p className="text-sm text-red-400">{errors.semester.message}</p>
               )}
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="department" className="text-sm font-medium text-white font-sans">
-                Department/Major
+                Department <span className="text-red-400">*</span>
               </Label>
-              <Input
+              <select
                 id="department"
-                type="text"
-                placeholder="Computer Science, etc."
-                className="border-white/40 bg-white/10 placeholder:text-white/50 text-white py-3 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 focus:bg-white/15 transition-all duration-200"
+                className="w-full border-white/40 bg-white/10 text-white py-3 px-3 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-blue-400 focus:bg-white/15 transition-all duration-200"
                 disabled={isLoading}
                 {...register("department")}
-              />
+              >
+                <option value="" className="bg-gray-900">Select Department</option>
+                <option value="Mechanical Engineering" className="bg-gray-900">Mechanical Engineering</option>
+                <option value="Civil Engineering" className="bg-gray-900">Civil Engineering</option>
+                <option value="Electrical Engineering" className="bg-gray-900">Electrical Engineering</option>
+                <option value="Computer Science" className="bg-gray-900">Computer Science</option>
+                <option value="Cyber Security" className="bg-gray-900">Cyber Security</option>
+                <option value="AI/ML" className="bg-gray-900">AI/ML</option>
+                <option value="Data Science" className="bg-gray-900">Data Science</option>
+                <option value="Information Technology" className="bg-gray-900">Information Technology</option>
+                <option value="IoT" className="bg-gray-900">IoT</option>
+              </select>
               {errors.department && (
                 <p className="text-sm text-red-400">{errors.department.message}</p>
               )}

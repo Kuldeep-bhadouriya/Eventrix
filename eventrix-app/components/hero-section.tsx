@@ -1,6 +1,11 @@
+'use client';
+
 import { LiquidButton } from '@/components/ui/liquid-glass-button';
+import { useRouter } from 'next/navigation';
 
 export function HeroSection() {
+  const router = useRouter();
+
   return (
     <div className="relative border border-[#27272a] !p-3 !pb-3 w-full mx-auto max-w-6xl z-10">
       <main className="relative border border-[#27272a] overflow-hidden px-8 md:px-12 lg:px-16 py-16 md:py-20 !pb-16 md:!pb-16 flex flex-col items-center gap-12 md:gap-14">
@@ -26,8 +31,12 @@ export function HeroSection() {
           
           {/* CTA Buttons */}
           <div className="flex items-center justify-center"> 
-            <LiquidButton className="text-white border rounded-full !px-20 text-lg font-semibold" size={'xl'}>
-              Get Started
+            <LiquidButton 
+              className="text-white border rounded-full !px-20 text-lg font-semibold" 
+              size={'xl'}
+              onClick={() => router.push('/auth/login')}
+            >
+              Join Eventrix
             </LiquidButton>
           </div>
         </div>

@@ -20,6 +20,7 @@ const publicRoutes = [
   "/auth/verify-email",
   "/auth/verify-request",
   "/auth/reset-password",
+  "/auth/complete-profile",
   "/api/auth",
 ];
 
@@ -95,6 +96,16 @@ export async function middleware(request: NextRequest) {
     const signInUrl = new URL("/auth/login", request.url);
     signInUrl.searchParams.set("callbackUrl", pathname);
     return NextResponse.redirect(signInUrl);
+  }
+
+  // Check if user needs to complete profile (except for complete-profile page itself)
+  if (
+    token.profileCompleted === false &&
+    pathname !== "/auth/complete-profile" &&
+    !pathname.startsWith("/api/auth/complete-profile")
+  ) {
+    const completeProfileUrl = new URL("/auth/complete-profile", request.url);
+    return NextResponse.redirect(completeProfileUrl);
   }
 
   // Check if route requires specific roles

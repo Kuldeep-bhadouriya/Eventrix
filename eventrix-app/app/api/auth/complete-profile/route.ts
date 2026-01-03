@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { profileCompletionSchema } from "@/lib/validation-schemas";
 
 export async function POST(request: NextRequest) {
   try {
@@ -16,24 +17,28 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { phone, college, yearOfStudy, department } = body;
-
-    // Validate required fields
-    if (!phone || !college || !yearOfStudy) {
+    
+    // Validate with Zod schema
+    const validationResult = profileCompletionSchema.safeParse(body);
+    
+    if (!validationResult.success) {
       return NextResponse.json(
-        { error: "Phone, college, and year of study are required" },
+        { error: "Validation failed", details: validationResult.error.issues },
         { status: 400 }
       );
     }
 
-    // Update user profile
+    const { phone, collegeRollNumber, semester, department } = validationResult.data;
+
+    // Update user profile with new fields
+    // Note: If TypeScript shows an error here, restart the TS server - Prisma client has been regenerated
     const updatedUser = await prisma.user.update({
       where: { id: session.user.id },
       data: {
         phone,
-        college,
-        yearOfStudy,
-        department: department || null,
+        collegeRollNumber,
+        semester,
+        department,
         profileCompleted: true,
       },
     });

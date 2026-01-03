@@ -36,6 +36,21 @@ export const signupSchema = z
 
 export type SignupFormData = z.infer<typeof signupSchema>;
 
+// Profile completion schema
+export const profileCompletionSchema = z.object({
+  phone: z.string().min(10, "Phone number must be at least 10 digits"),
+  collegeRollNumber: z
+    .string()
+    .regex(
+      /^0905[A-Z]{2}\d{6}$/,
+      "Roll number must be in format 0905XX241148 (0905 + Department Code + Year + Roll Number)"
+    ),
+  semester: z.string().min(1, "Semester is required"),
+  department: z.string().min(1, "Department is required"),
+});
+
+export type ProfileCompletionFormData = z.infer<typeof profileCompletionSchema>;
+
 // Forgot password schema
 export const forgotPasswordSchema = z.object({
   email: z.string().email("Please enter a valid email address"),

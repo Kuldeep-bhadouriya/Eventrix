@@ -1,5 +1,4 @@
 import { NextRequest } from 'next/server';
-import { z } from 'zod';
 import {
   successResponse,
   errorResponse,
@@ -7,31 +6,11 @@ import {
   parsePagination,
 } from '@/lib/api';
 import { EventStatus, EventCategory } from '@/types/events';
+import { getMockEvents } from '@/lib/events/mock-events';
+import { eventSchema } from '@/lib/events/event-schemas';
 
-// Mock data for now - replace with actual database queries
-const mockEvents = Array.from({ length: 50 }, (_, i) => ({
-  id: `event-${i + 1}`,
-  title: `Amazing Event ${i + 1}`,
-  description: `This is a detailed description of event ${i + 1}. It will be an amazing experience with great speakers and networking opportunities.`,
-  date: new Date(Date.now() + Math.random() * 90 * 24 * 60 * 60 * 1000).toISOString(), // Random date in next 90 days
-  time: '10:00 AM',
-  endTime: '05:00 PM',
-  venue: `Venue ${Math.floor(i / 5) + 1}, City Center`,
-  capacity: Math.floor(Math.random() * 500) + 50,
-  registeredCount: Math.floor(Math.random() * 300),
-  organizerId: `org-${Math.floor(i / 3) + 1}`,
-  organizer: {
-    id: `org-${Math.floor(i / 3) + 1}`,
-    organizationName: `Organization ${Math.floor(i / 3) + 1}`,
-    logo: undefined,
-  },
-  category: Object.values(EventCategory)[i % Object.values(EventCategory).length] as EventCategory,
-  tags: ['networking', 'workshop', 'learning'],
-  bannerUrl: undefined,
-  status: EventStatus.PUBLISHED,
-  createdAt: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000).toISOString(),
-  updatedAt: new Date().toISOString(),
-}));
+// Shared mock data used across event endpoints
+const mockEvents = getMockEvents();
 
 /**
  * GET /api/events
@@ -122,7 +101,9 @@ export async function GET(request: NextRequest) {
     // Calculate pagination
     const total = filteredEvents.length;
     const totalPages = Math.ceil(total / limit);
-    const paginatedEvents = filteredEvents.slice(skip, skip + limit);
+    const paginatedEvents = filteredEvents
+      .slice(skip, skip + limit)
+      .map((item) => eventSchema.parse(item));
 
     // Return paginated response
     return paginatedResponse(paginatedEvents, page, limit, total);

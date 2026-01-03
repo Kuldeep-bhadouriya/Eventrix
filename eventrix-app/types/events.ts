@@ -80,3 +80,41 @@ export interface EventRegistration {
   status: 'REGISTERED' | 'ATTENDED' | 'CANCELLED';
   checkInTime?: Date | string;
 }
+
+export interface EventAgendaItem {
+  time: string;
+  title: string;
+  description?: string;
+  speaker?: string;
+}
+
+export interface EventLocation {
+  address: string;
+  mapUrl?: string;
+}
+
+export interface OrganizerInfo {
+  id: string;
+  organizationName: string;
+  logo?: string;
+  contactEmail?: string;
+  contactPhone?: string;
+  website?: string;
+  description?: string;
+}
+
+export interface EventDetails extends Event {
+  agenda?: EventAgendaItem[];
+  highlights?: string[];
+  location?: EventLocation;
+  organizer?: OrganizerInfo;
+}
+
+export interface EventRegistrationStatus {
+  registered: boolean;
+  alreadyRegistered?: boolean;
+  capacityFull?: boolean;
+  registeredCount?: number;
+  capacity?: number;
+  requiresAuth?: boolean;
+}

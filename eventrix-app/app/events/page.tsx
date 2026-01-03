@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import {
   EventCard,
@@ -14,7 +14,7 @@ import { EventCategory, EventStatus, EventListResponse } from '@/types/events';
 import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
 import { format, addDays, startOfWeek, endOfWeek, startOfMonth, endOfMonth } from 'date-fns';
 
-export default function EventsPage() {
+function EventsPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -300,5 +300,39 @@ export default function EventsPage() {
         </div>
       </section>
     </main>
+  );
+}
+
+export default function EventsPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="min-h-screen bg-gradient-to-b from-white to-gray-50 dark:from-gray-950 dark:to-gray-900">
+          <section className="border-b bg-white dark:bg-gray-900">
+            <div className="container mx-auto px-4 py-8 sm:px-6 lg:px-8">
+              <div className="mb-6">
+                <h1 className="text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
+                  Discover Events
+                </h1>
+                <p className="mt-2 text-lg text-gray-600 dark:text-gray-300">
+                  Find and join amazing events happening around you
+                </p>
+              </div>
+            </div>
+          </section>
+          <section className="py-8">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <EventCardSkeleton key={i} />
+                ))}
+              </div>
+            </div>
+          </section>
+        </main>
+      }
+    >
+      <EventsPageContent />
+    </Suspense>
   );
 }

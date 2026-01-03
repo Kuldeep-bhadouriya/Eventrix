@@ -1,10 +1,4 @@
-/**
- * API Utilities Test Suite
- * 
- * Manual testing file to verify API utilities work correctly.
- * Run with: npx tsx lib/api/__tests__/integration.test.ts
- */
-
+import { describe, it, expect, beforeEach } from 'vitest';
 import { z } from 'zod';
 import {
   ApiError,
@@ -21,132 +15,98 @@ import {
   paginatedResponse,
   parsePagination,
 } from '../api-response';
-import {
-  validate,
-  safeValidate,
-  commonSchemas,
-} from '../api-validator';
-import {
-  rateLimit,
-  rateLimitPresets,
-  getClientIp,
-  clearRateLimits,
-} from '../rate-limiter';
-import {
-  apiLogger,
-  logger,
-} from '../api-logger';
+import { validate, safeValidate, commonSchemas } from '../api-validator';
+import { rateLimit, rateLimitPresets, getClientIp, clearRateLimits } from '../rate-limiter';
+import { apiLogger, logger } from '../api-logger';
 
-async function runTests() {
-  try {
-    console.log('🔧 Testing API Utilities Integration\n');
+function extractStatus(response: Response) {
+  return response.status;
+}
 
-    // 1. Test Error Classes
-    console.log('1️⃣  Testing Error Classes...');
+describe('API utilities integration', () => {
+  beforeEach(() => {
+    clearRateLimits();
+  });
 
+  it('creates and identifies API errors', () => {
     const validationError = new ValidationError('Test validation error', [
       { field: 'email', message: 'Invalid email' },
     ]);
-    console.log('   ✓ ValidationError created:', validationError.statusCode === 400);
-
     const notFoundError = new NotFoundError('User', '123');
-    console.log('   ✓ NotFoundError created:', notFoundError.statusCode === 404);
-
     const rateLimitError = new RateLimitError('Too many requests', 60);
-    console.log('   ✓ RateLimitError created:', rateLimitError.statusCode === 429);
+    const authError = new AuthenticationError('Auth');
 
-    console.log('   ✓ isApiError check:', isApiError(validationError) === true);
+    expect(validationError.statusCode).toBe(400);
+    expect(notFoundError.statusCode).toBe(404);
+    expect(rateLimitError.statusCode).toBe(429);
+    expect(authError).toBeInstanceOf(ApiError);
+    expect(isApiError(validationError)).toBe(true);
+  });
 
-    // 2. Test Response Utilities
-    console.log('\n2️⃣  Testing Response Utilities...');
-
+  it('builds standard responses', () => {
     const mockReq = new Request('http://localhost:3000/api/test?page=2&limit=20');
     const searchParams = new URL(mockReq.url).searchParams;
     const pagination = parsePagination(searchParams);
-    
-    console.log('   ✓ Parse pagination:', pagination.page === 2 && pagination.limit === 20);
+    expect(pagination).toMatchObject({ page: 2, limit: 20, skip: 20 });
 
     const successResp = successResponse({ id: 1, name: 'Test' });
-    console.log('   ✓ Success response created:', successResp.status === 200);
+    expect(extractStatus(successResp)).toBe(200);
 
+    const notFoundError = new NotFoundError('User', '1');
     const errorResp = errorResponse(notFoundError);
-    console.log('   ✓ Error response created:', errorResp.status === 404);
+    expect(extractStatus(errorResp)).toBe(404);
 
     const createdResp = createdResponse({ id: 1 }, '/api/test/1');
-    console.log('   ✓ Created response:', createdResp.status === 201);
+    expect(extractStatus(createdResp)).toBe(201);
 
     const paginatedResp = paginatedResponse([{ id: 1 }, { id: 2 }], 1, 10, 50);
-    console.log('   ✓ Paginated response created:', paginatedResp.status === 200);
+    expect(extractStatus(paginatedResp)).toBe(200);
+  });
 
-    // 3. Test Validation
-    console.log('\n3️⃣  Testing Validation Utilities...');
-
+  it('validates data with shared schemas', () => {
     const testSchema = z.object({
       name: z.string().min(1),
       email: commonSchemas.email,
     });
 
     const validData = validate({ name: 'John', email: 'john@example.com' }, testSchema);
-    console.log('   ✓ Valid data passes:', validData.name === 'John');
+    expect(validData.name).toBe('John');
 
     const invalidResult = safeValidate({ name: '', email: 'invalid' }, testSchema);
-    console.log('   ✓ Invalid data caught:', !invalidResult.success);
+    expect(invalidResult.success).toBe(false);
 
-    const emailValid = safeValidate('test@example.com', commonSchemas.email);
-    console.log('   ✓ Email validation works:', emailValid.success === true);
+    expect(safeValidate('test@example.com', commonSchemas.email).success).toBe(true);
+    expect(safeValidate('Test123!@#', commonSchemas.password).success).toBe(true);
+  });
 
-    const passwordValid = safeValidate('Test123!@#', commonSchemas.password);
-    console.log('   ✓ Password validation works:', passwordValid.success === true);
-
-    // 4. Test Rate Limiter
-    console.log('\n4️⃣  Testing Rate Limiter...');
-
-    clearRateLimits();
-
-    const testLimiter = rateLimit({
-      windowMs: 60000,
-      max: 5,
-    });
-
+  it('enforces rate limits and exposes helpers', async () => {
+    const testLimiter = rateLimit({ windowMs: 60000, max: 1 });
     const testReq1 = new Request('http://localhost:3000/api/test');
-    
-    try {
-      await testLimiter(testReq1);
-      console.log('   ✓ First request allowed');
-    } catch (error) {
-      console.log('   ✗ First request failed:', error);
-    }
+
+    await expect(testLimiter(testReq1)).resolves.toBeUndefined();
+
+    await expect(testLimiter(testReq1)).rejects.toBeInstanceOf(ApiError);
 
     const ip = getClientIp(testReq1);
-    console.log('   ✓ IP extraction works:', ip !== undefined);
+    expect(ip).toBeDefined();
+    expect(rateLimitPresets.strict).toBeDefined();
+    expect(rateLimitPresets.moderate).toBeDefined();
+  });
 
-    console.log('   ✓ Rate limit presets exist:', 
-      rateLimitPresets.strict !== undefined &&
-      rateLimitPresets.moderate !== undefined
-    );
+  it('creates structured loggers', () => {
+    const testReq = new Request('http://localhost:3000/api/test');
+    const log = apiLogger()(testReq);
 
-    // 5. Test Logger
-    console.log('\n5️⃣  Testing Logger...');
+    expect(typeof log.info).toBe('function');
+    expect(typeof log.error).toBe('function');
+    expect(typeof log.debug).toBe('function');
 
-    const testReq2 = new Request('http://localhost:3000/api/test');
-    const log = apiLogger()(testReq2);
-    
-    console.log('   ✓ Logger created');
-    
-    console.log('   ✓ Log methods exist:', 
-      typeof log.info === 'function' &&
-      typeof log.error === 'function' &&
-      typeof log.debug === 'function'
-    );
+    expect(() => logger.info('Test info')).not.toThrow();
+    expect(() => logger.debug('Test debug')).not.toThrow();
+  });
 
-    logger.info('Test info message');
-    logger.debug('Test debug message');
-    console.log('   ✓ Structured logger works');
-
-    // 6. Test Index Exports
-    console.log('\n6️⃣  Testing Index Exports...');
+  it('re-exports utilities from index', async () => {
     const apiIndex = await import('../index');
-    
     const exports = [
       'ApiError',
       'ValidationError',
@@ -158,24 +118,8 @@ async function runTests() {
       'apiLogger',
     ];
 
-    const allExported = exports.every(exp => exp in apiIndex);
-    console.log('   ✓ All utilities exported:', allExported);
-
-    // Summary
-    console.log('\n✅ All API Utilities Tests Passed!\n');
-    console.log('Summary:');
-    console.log('  • Error classes: Working ✓');
-    console.log('  • Response utilities: Working ✓');
-    console.log('  • Validation: Working ✓');
-    console.log('  • Rate limiting: Working ✓');
-    console.log('  • Logging: Working ✓');
-    console.log('  • Exports: Working ✓');
-
-  } catch (error) {
-    console.error('\n❌ Test Failed:', error);
-    process.exit(1);
-  }
-}
-
-runTests();
+    const allExported = exports.every((exp) => exp in apiIndex);
+    expect(allExported).toBe(true);
+  });
+});
 

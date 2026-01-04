@@ -33,7 +33,7 @@ export function DashboardSidebar({
     },
     {
       label: "My Events",
-      href: "/dashboard/my-events",
+      href: "/dashboard/events",
       icon: <CalendarDays className="h-4 w-4" />,
     },
     {

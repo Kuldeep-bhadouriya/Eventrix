@@ -37,12 +37,15 @@
     "date-fns": "^4.1.0",
     "dotenv": "^17.2.3",
     "framer-motion": "^12.23.26",
+    "html-to-image": "^1.11.13",
+    "jspdf": "^4.0.0",
     "lucide-react": "^0.561.0",
     "next": "16.0.10",
     "next-auth": "^4.24.13",
     "nodemailer": "^7.0.12",
     "pg": "^8.16.3",
     "prisma": "^7.2.0",
+    "qrcode": "^1.5.4",
     "react": "19.2.1",
     "react-dom": "19.2.1",
     "react-hook-form": "^7.69.0",
@@ -54,10 +57,10 @@
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/pg": "^8.16.0",
+    "@types/qrcode": "^1.5.6",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/three": "^0.182.0",
-    "vitest": "^2.1.5",
     "dotenv-cli": "^11.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.0.10",
@@ -65,6 +68,7 @@
     "prettier": "^3.7.4",
     "prettier-plugin-tailwindcss": "^0.7.2",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^2.1.5"
   }
 }

@@ -89,7 +89,7 @@ function hasAccess(userRole: UserRole, requiredRoles: UserRole[]): boolean {
   return requiredRoles.includes(userRole);
 }
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Allow static files and Next.js internals
@@ -158,14 +158,14 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   } catch (error) {
     // Log error and redirect to error page
-    console.error("Middleware error:", error);
+    console.error("Proxy error:", error);
     const errorUrl = new URL("/auth/error", request.url);
     errorUrl.searchParams.set("error", "Configuration");
     return NextResponse.redirect(errorUrl);
   }
 }
 
-// Configure which routes should run middleware
+// Configure which routes should run proxy
 export const config = {
   matcher: [
     /*

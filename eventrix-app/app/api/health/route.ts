@@ -7,7 +7,7 @@
 
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
-import { successResponse, errorResponse } from '@/lib/api/api-response';
+import { errorResponse } from '@/lib/api/api-response';
 import { getRateLimitStoreSize } from '@/lib/api/rate-limiter';
 
 /**
@@ -190,7 +190,7 @@ function getOverallStatus(checks: HealthCheckResponse['checks']): HealthStatus {
  * GET /api/health
  * Health check endpoint
  */
-export async function GET(req: Request): Promise<NextResponse> {
+export async function GET(_req: Request): Promise<NextResponse> {
   try {
     // Run all checks in parallel
     const [databaseCheck, memoryCheck, rateLimitCheck] = await Promise.all([

@@ -1,6 +1,5 @@
 import { NextRequest } from 'next/server';
 import {
-  successResponse,
   errorResponse,
   paginatedResponse,
   parsePagination,
@@ -100,7 +99,6 @@ export async function GET(request: NextRequest) {
 
     // Calculate pagination
     const total = filteredEvents.length;
-    const totalPages = Math.ceil(total / limit);
     const paginatedEvents = filteredEvents
       .slice(skip, skip + limit)
       .map((item) => eventSchema.parse(item));

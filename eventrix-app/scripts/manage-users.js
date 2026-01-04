@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+/* eslint-disable @typescript-eslint/no-require-imports */
+
 /**
  * User Management Script
  * Run with: node scripts/manage-users.js [command]

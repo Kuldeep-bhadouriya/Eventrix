@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Copy, Share2, Mail, MessageCircle, Twitter, Facebook } from 'lucide-react';
 
@@ -10,16 +10,8 @@ interface ShareButtonsProps {
 }
 
 export function ShareButtons({ title, url }: ShareButtonsProps) {
-  const [currentUrl, setCurrentUrl] = useState(
-    url || (typeof window !== 'undefined' ? window.location.href : '')
-  );
+  const currentUrl = url || (typeof window !== 'undefined' ? window.location.href : '');
   const [copied, setCopied] = useState(false);
-
-  useEffect(() => {
-    if (!url && typeof window !== 'undefined') {
-      setCurrentUrl(window.location.href);
-    }
-  }, [url]);
 
   const encodedTitle = encodeURIComponent(title);
   const encodedUrl = encodeURIComponent(currentUrl);

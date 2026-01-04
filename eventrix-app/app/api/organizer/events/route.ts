@@ -1,6 +1,6 @@
 import { handleApiError, paginatedResponse, successResponse, validateBody, validateQuery } from "@/lib/api";
 import { prisma } from "@/lib/db";
-import { Prisma } from "@prisma/client";
+import { EventStatus, Prisma } from "@prisma/client";
 
 import { requireOrganizerApiSession } from "@/lib/organizer/api-auth";
 import {
@@ -33,7 +33,12 @@ export const GET = handleApiError(async (req: Request) => {
     organizerId: organizer.id,
   };
 
-  if (query.status) where.status = query.status;
+  if (query.status) {
+    const allowedStatuses = new Set(Object.values(EventStatus));
+    if (allowedStatuses.has(query.status as EventStatus)) {
+      where.status = query.status as EventStatus;
+    }
+  }
   if (query.category) where.category = query.category;
   if (query.q) {
     where.OR = [
@@ -105,7 +110,14 @@ export const POST = handleApiError(async (req: Request) => {
       organizerId: organizer.id,
       title: body.title,
       description: body.description,
-      details: body.details ?? null,
+      ...(body.details !== undefined
+        ? {
+            details:
+              body.details === null
+                ? Prisma.DbNull
+                : (body.details as Prisma.InputJsonValue),
+          }
+        : {}),
       category: body.category,
       date: new Date(body.date),
       time: body.time,

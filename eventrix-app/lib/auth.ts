@@ -1,5 +1,4 @@
-import { NextAuthOptions, Session, User } from "next-auth";
-import { JWT } from "next-auth/jwt";
+import { NextAuthOptions, Session } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "@auth/prisma-adapter";
@@ -213,7 +212,7 @@ export const authOptions: NextAuthOptions = {
     },
 
     // Sign in callback - control if user can sign in
-    async signIn({ user, account, profile }) {
+    async signIn({ user: _user, account, profile: _profile }) {
       // Allow OAuth sign ins
       if (account?.provider === "google") {
         // Additional checks can be added here
@@ -242,7 +241,7 @@ export const authOptions: NextAuthOptions = {
 
   // Configure events
   events: {
-    async signIn({ user, account, profile, isNewUser }) {
+    async signIn({ user, account: _account, profile: _profile, isNewUser: _isNewUser }) {
       console.log("User signed in:", user.email);
       // You can add additional logic here like logging, analytics, etc.
     },

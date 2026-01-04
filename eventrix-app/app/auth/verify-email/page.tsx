@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { CheckCircle, XCircle, Loader2, Mail } from "lucide-react";
+import { CheckCircle, Loader2, Mail } from "lucide-react";
 import { AuthCard, FormButton, AlertMessage } from "@/components/auth";
 
 function VerifyEmailContent() {
@@ -52,7 +52,7 @@ function VerifyEmailContent() {
       setTimeout(() => {
         router.push("/auth/login");
       }, 3000);
-    } catch (error) {
+    } catch (_error) {
       setErrorMessage("An unexpected error occurred. Please try again.");
       setIsSuccess(false);
     } finally {
@@ -87,7 +87,7 @@ function VerifyEmailContent() {
       }
 
       setResendSuccess(true);
-    } catch (error) {
+    } catch (_error) {
       setErrorMessage("An unexpected error occurred. Please try again.");
     } finally {
       setIsResending(false);
@@ -143,7 +143,7 @@ function VerifyEmailContent() {
     return (
       <AuthCard
         title="Verification failed"
-        description="We couldn't verify your email address"
+        description="We couldn&apos;t verify your email address"
         footer={{
           text: "Need help?",
           linkText: "Contact support",
@@ -201,7 +201,7 @@ function VerifyEmailContent() {
           Check your email
         </h3>
         <p className="text-center text-gray-600 dark:text-gray-400 mb-6 max-w-sm">
-          We've sent a verification link to <strong>{email || "your email"}</strong>.
+          We&apos;ve sent a verification link to <strong>{email || "your email"}</strong>.
           Click the link in the email to verify your account.
         </p>
 
@@ -215,7 +215,7 @@ function VerifyEmailContent() {
           ) : (
             <>
               <p className="text-sm text-center text-gray-500 dark:text-gray-400">
-                Didn't receive the email?
+                Didn&apos;t receive the email?
               </p>
               {email && (
                 <FormButton

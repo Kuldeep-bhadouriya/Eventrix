@@ -11,7 +11,6 @@
 
 import {
   successResponse,
-  errorResponse,
   createdResponse,
   paginatedResponse,
   handleApiError,

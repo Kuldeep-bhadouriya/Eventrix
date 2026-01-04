@@ -11,6 +11,7 @@ export type OrganizerEventRow = {
   title: string;
   date: string;
   time: string;
+  venue: string;
   status: string;
   registeredCount: number;
   capacity: number;

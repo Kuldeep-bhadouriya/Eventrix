@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Loader2, CheckCircle2, ShieldX, AlertTriangle } from 'lucide-react';
@@ -23,22 +23,18 @@ export function RegisterButton({
   onRegistered,
 }: RegisterButtonProps) {
   const router = useRouter();
-  const [status, setStatus] = useState<
-    'idle' | 'registering' | 'registered' | 'full' | 'error' | 'closed'
-  >('idle');
+  const [actionStatus, setActionStatus] = useState<'idle' | 'registering' | 'error'>('idle');
+  const [localRegistered, setLocalRegistered] = useState(false);
   const [message, setMessage] = useState('');
 
-  useEffect(() => {
-    if (isRegistered) {
-      setStatus('registered');
-    } else if (isFull) {
-      setStatus('full');
-    } else if (!isOpen) {
-      setStatus('closed');
-    } else {
-      setStatus('idle');
-    }
-  }, [isRegistered, isFull, isOpen]);
+  const baseStatus = useMemo(() => {
+    if (localRegistered || isRegistered) return 'registered' as const;
+    if (isFull) return 'full' as const;
+    if (!isOpen) return 'closed' as const;
+    return 'idle' as const;
+  }, [localRegistered, isRegistered, isFull, isOpen]);
+
+  const status = actionStatus === 'idle' ? baseStatus : actionStatus;
 
   const handleRegister = async () => {
     if (!isAuthenticated) {
@@ -49,7 +45,7 @@ export function RegisterButton({
     if (!isOpen || isFull || status === 'registered') return;
 
     try {
-      setStatus('registering');
+      setActionStatus('registering');
       setMessage('');
 
       const response = await fetch(`/api/events/${eventId}/register`, {
@@ -60,21 +56,22 @@ export function RegisterButton({
 
       if (!response.ok || !result.success) {
         if (response.status === 409) {
-          setStatus('full');
+          setActionStatus('idle');
           setMessage('Event is already full.');
           return;
         }
-        setStatus('error');
+        setActionStatus('error');
         setMessage(result.error?.message || 'Registration failed');
         return;
       }
 
-      setStatus('registered');
+      setLocalRegistered(true);
+      setActionStatus('idle');
       setMessage('You are registered for this event.');
       onRegistered?.({ registeredCount: result.data?.registeredCount });
     } catch (error) {
       console.error('Registration error', error);
-      setStatus('error');
+      setActionStatus('error');
       setMessage('Something went wrong. Please try again.');
     }
   };

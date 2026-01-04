@@ -12,7 +12,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { EventCategory, EventStatus, EventListResponse } from '@/types/events';
 import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
-import { format, addDays, startOfWeek, endOfWeek, startOfMonth, endOfMonth } from 'date-fns';
+import { format, startOfWeek, endOfWeek, startOfMonth, endOfMonth } from 'date-fns';
 
 function EventsPageContent() {
   const router = useRouter();

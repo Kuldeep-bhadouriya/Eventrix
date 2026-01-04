@@ -11,19 +11,12 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks";
 import { getDashboardUrl } from "@/lib/utils-shared";
 import { Button } from "@/components/ui/button";
-import { FileQuestion, Home, ArrowLeft, Search } from "lucide-react";
-import { useEffect, useState } from "react";
+import { FileQuestion, Home, ArrowLeft } from "lucide-react";
 
 export default function NotFoundPage() {
   const router = useRouter();
   const { user, isLoading } = useAuth();
-  const [dashboardUrl, setDashboardUrl] = useState("/");
-
-  useEffect(() => {
-    if (user?.role) {
-      setDashboardUrl(getDashboardUrl(user.role));
-    }
-  }, [user]);
+  const dashboardUrl = user?.role ? getDashboardUrl(user.role) : "/";
 
   const handleGoBack = () => {
     if (window.history.length > 1) {

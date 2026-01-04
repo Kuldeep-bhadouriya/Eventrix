@@ -15,8 +15,10 @@ export default function PreloaderWrapper({
   useEffect(() => {
     // Show preloader only on home page
     if (pathname === "/") {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setShowPreloader(true)
     } else {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setShowPreloader(false)
     }
   }, [pathname])

@@ -15,8 +15,9 @@ import { StepIndicator } from "@/components/organizer/events/StepIndicator";
 import { DraftSaveIndicator } from "@/components/organizer/events/DraftSaveIndicator";
 import { ImageUploader } from "@/components/organizer/events/ImageUploader";
 
-type FormValues = z.infer<typeof organizerCreateEventSchema>;
-type Details = NonNullable<FormValues["details"]>;
+type FormValues = z.input<typeof organizerCreateEventSchema>;
+type ParsedValues = z.output<typeof organizerCreateEventSchema>;
+type Details = NonNullable<ParsedValues["details"]>;
 
 const STEPS = [
   "Basic Info",
@@ -26,11 +27,16 @@ const STEPS = [
   "Review & Publish",
 ];
 
-function debounce<T extends (...args: unknown[]) => void>(fn: T, ms: number) {
+function debounce<TArgs extends unknown[]>(
+  fn: (...args: TArgs) => void | Promise<void>,
+  ms: number,
+) {
   let t: number | undefined;
-  return (...args: Parameters<T>) => {
+  return (...args: TArgs) => {
     window.clearTimeout(t);
-    t = window.setTimeout(() => fn(...args), ms);
+    t = window.setTimeout(() => {
+      void fn(...args);
+    }, ms);
   };
 }
 

@@ -11,7 +11,6 @@ import {
 
 import { Dock, DockIcon, DockItem, DockLabel } from '@/components/ui/dock';
 import Link from 'next/link';
-import Image from 'next/image';
 
 const navData = [
   {

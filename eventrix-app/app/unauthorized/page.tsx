@@ -12,18 +12,11 @@ import { useAuth } from "@/hooks";
 import { getDashboardUrl } from "@/lib/utils-shared";
 import { Button } from "@/components/ui/button";
 import { ShieldAlert, Home, ArrowLeft } from "lucide-react";
-import { useEffect, useState } from "react";
 
 export default function UnauthorizedPage() {
   const router = useRouter();
   const { user, isLoading } = useAuth();
-  const [dashboardUrl, setDashboardUrl] = useState("/dashboard");
-
-  useEffect(() => {
-    if (user?.role) {
-      setDashboardUrl(getDashboardUrl(user.role));
-    }
-  }, [user]);
+  const dashboardUrl = user?.role ? getDashboardUrl(user.role) : "/dashboard";
 
   const handleGoBack = () => {
     if (window.history.length > 1) {

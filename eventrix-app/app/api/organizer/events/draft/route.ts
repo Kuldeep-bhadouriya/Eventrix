@@ -1,5 +1,6 @@
 import { handleApiError, successResponse, validateBody } from "@/lib/api";
 import { prisma } from "@/lib/db";
+import { Prisma } from "@prisma/client";
 
 import { requireOrganizerApiSession } from "@/lib/organizer/api-auth";
 import { organizerCreateEventSchema } from "@/lib/organizer/event-schemas";
@@ -43,7 +44,14 @@ export const POST = handleApiError(async (req: Request) => {
           organizerId: organizer.id,
           title: data.title ?? "Untitled draft",
           description: data.description ?? "",
-          details: data.details ?? undefined,
+          ...(data.details !== undefined
+            ? {
+                details:
+                  data.details === null
+                    ? Prisma.DbNull
+                    : (data.details as Prisma.InputJsonValue),
+              }
+            : {}),
           category: data.category ?? "OTHER",
           date: data.date ? new Date(data.date) : new Date(),
           time: data.time ?? "00:00",
@@ -61,7 +69,14 @@ export const POST = handleApiError(async (req: Request) => {
           organizerId: organizer.id,
           title: data.title ?? "Untitled draft",
           description: data.description ?? "",
-          details: data.details ?? null,
+          ...(data.details !== undefined
+            ? {
+                details:
+                  data.details === null
+                    ? Prisma.DbNull
+                    : (data.details as Prisma.InputJsonValue),
+              }
+            : {}),
           category: data.category ?? "OTHER",
           date: data.date ? new Date(data.date) : new Date(),
           time: data.time ?? "00:00",

@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 
 import type { CertificateListItem } from "@/types/certificates";
 import { EmptyState } from "@/components/dashboard/EmptyState";
@@ -51,7 +52,7 @@ export function CertificateGrid({ certificates }: { certificates: CertificateLis
         description="Earn certificates by attending events you've registered for."
         action={
           <Button asChild>
-            <a href="/events">Browse events</a>
+            <Link href="/events">Browse events</Link>
           </Button>
         }
       />

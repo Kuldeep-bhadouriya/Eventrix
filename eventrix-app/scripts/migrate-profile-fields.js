@@ -1,6 +1,8 @@
 // Migration script to update profile fields
 // Run with: node scripts/migrate-profile-fields.js
 
+/* eslint-disable @typescript-eslint/no-require-imports */
+
 const { Pool } = require('pg');
 require('dotenv').config();
 

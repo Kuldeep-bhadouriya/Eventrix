@@ -162,7 +162,7 @@ export async function getAuthSession() {
  * }
  * ```
  */
-export async function requireAuth(request?: NextRequest) {
+export async function requireAuth(_request?: NextRequest) {
   return await getAuthSession();
 }
 
@@ -450,7 +450,7 @@ export async function parseBody<T = any>(
   try {
     const body = await request.json();
     return body as T;
-  } catch (error) {
+  } catch (_error) {
     return errorResponse("Invalid JSON body", 400, "INVALID_JSON");
   }
 }

@@ -78,7 +78,7 @@ function ResetPasswordForm() {
       setTimeout(() => {
         router.push("/auth/login");
       }, 3000);
-    } catch (error) {
+    } catch (_error) {
       setErrorMessage("An unexpected error occurred. Please try again.");
     } finally {
       setIsLoading(false);

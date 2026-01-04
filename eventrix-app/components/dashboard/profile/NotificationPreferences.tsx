@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 
@@ -12,16 +12,19 @@ type Prefs = {
 const KEY = "eventrix.notificationPrefs";
 
 export function NotificationPreferences() {
-  const [prefs, setPrefs] = useState<Prefs>({ email: true, whatsapp: false });
-
-  useEffect(() => {
+  const [prefs, setPrefs] = useState<Prefs>(() => {
     try {
       const raw = localStorage.getItem(KEY);
-      if (raw) setPrefs(JSON.parse(raw));
+      if (!raw) return { email: true, whatsapp: false };
+      const parsed = JSON.parse(raw) as Partial<Prefs>;
+      return {
+        email: Boolean(parsed.email ?? true),
+        whatsapp: Boolean(parsed.whatsapp ?? false),
+      };
     } catch {
-      // ignore
+      return { email: true, whatsapp: false };
     }
-  }, []);
+  });
 
   return (
     <div className="space-y-2">

@@ -14,7 +14,7 @@ import { profileCompletionSchema, ProfileCompletionFormData } from "@/lib/valida
 
 export default function CompleteProfilePage() {
   const router = useRouter();
-  const { data: session, status, update } = useSession();
+  const { status, update } = useSession();
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 

@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import type { Metadata } from "next";
+import Link from "next/link";
 
 import { authOptions } from "@/lib/auth";
 import { EmptyState } from "@/components/dashboard/EmptyState";
@@ -20,7 +21,7 @@ export default async function DashboardEventsPage() {
       description="This page will list your registered events. Use the Event Pass link from an event to view your QR code pass."
       action={
         <Button asChild>
-          <a href="/events">Browse events</a>
+          <Link href="/events">Browse events</Link>
         </Button>
       }
     />

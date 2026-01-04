@@ -6,7 +6,7 @@
  */
 
 import { NextResponse } from 'next/server';
-import { ApiError, isApiError, toApiError } from './api-error';
+import { isApiError, toApiError } from './api-error';
 
 /**
  * Standard API response format

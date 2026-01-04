@@ -71,7 +71,7 @@ export default function SignUpPage() {
       setTimeout(() => {
         router.push("/auth/verify-email?email=" + encodeURIComponent(data.email));
       }, 3000);
-    } catch (error) {
+    } catch (_error) {
       setErrorMessage("An unexpected error occurred. Please try again.");
     } finally {
       setIsLoading(false);
@@ -84,7 +84,7 @@ export default function SignUpPage() {
 
     try {
       await signIn("google", { callbackUrl: "/dashboard" });
-    } catch (error) {
+    } catch (_error) {
       setErrorMessage("Failed to connect to Google. Please try again.");
       setIsGoogleLoading(false);
     }

@@ -13,8 +13,7 @@ import { useEffect, useMemo } from "react";
 import { UserRole } from "@prisma/client";
 import { 
   getDashboardUrl, 
-  checkPermissionClient, 
-  hasAnyRoleClient 
+  checkPermissionClient
 } from "@/lib/utils-shared";
 
 /**

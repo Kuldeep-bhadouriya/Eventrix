@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import type { Metadata } from "next";
+import Link from "next/link";
 
 import { authOptions } from "@/lib/auth";
 import { getEventPassForUser } from "@/lib/dashboard/event-pass-queries";
@@ -32,7 +33,7 @@ export default async function EventPassPage({
         description="You may not be registered for this event, or the event does not exist."
         action={
           <Button asChild>
-            <a href="/events">Browse events</a>
+            <Link href="/events">Browse events</Link>
           </Button>
         }
       />

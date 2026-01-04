@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, Suspense } from "react";
-import { signIn, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
@@ -79,7 +79,7 @@ function LoginForm() {
           router.refresh();
         }
       }
-    } catch (error) {
+    } catch (_error) {
       setErrorMessage("An unexpected error occurred. Please try again.");
     } finally {
       setIsLoading(false);
@@ -110,7 +110,7 @@ function LoginForm() {
           router.refresh();
         }
       }
-    } catch (error) {
+    } catch (_error) {
       setErrorMessage("Failed to connect to Google. Please try again.");
       setIsGoogleLoading(false);
     }

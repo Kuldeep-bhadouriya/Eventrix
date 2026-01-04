@@ -53,7 +53,7 @@ export default function ForgotPasswordPage() {
       setSuccessMessage(
         "If an account exists with this email, you will receive a password reset link shortly."
       );
-    } catch (error) {
+    } catch (_error) {
       setErrorMessage("An unexpected error occurred. Please try again.");
     } finally {
       setIsLoading(false);
@@ -63,7 +63,7 @@ export default function ForgotPasswordPage() {
   return (
     <AuthCard
       title="Forgot password?"
-      description="Enter your email address and we'll send you a link to reset your password"
+      description="Enter your email address and we&apos;ll send you a link to reset your password"
       footer={{
         text: "Remember your password?",
         linkText: "Sign in",
@@ -89,7 +89,7 @@ export default function ForgotPasswordPage() {
         <div className="mb-6 flex items-start gap-3 p-4 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg">
           <Mail className="h-5 w-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
           <p className="text-sm text-blue-800 dark:text-blue-200">
-            We'll send you an email with instructions to reset your password.
+            We&apos;ll send you an email with instructions to reset your password.
           </p>
         </div>
       )}
@@ -121,7 +121,7 @@ export default function ForgotPasswordPage() {
       {/* Additional links */}
       <div className="mt-6 text-center">
         <p className="text-sm text-gray-600 dark:text-gray-400">
-          Don't have an account?{" "}
+          Don&apos;t have an account?{" "}
           <Link
             href="/auth/signup"
             className="font-semibold text-purple-600 hover:text-purple-500 dark:text-purple-400 dark:hover:text-purple-300 transition-colors"

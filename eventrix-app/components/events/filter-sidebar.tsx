@@ -42,7 +42,7 @@ export function FilterSidebar({
 
   const hasActiveFilters = category || status || dateRange !== 'all';
 
-  const FilterContent = () => (
+  const filterContent = (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold">Filters</h3>
@@ -95,7 +95,7 @@ export function FilterSidebar({
       {/* Desktop Sidebar */}
       <aside className={`hidden lg:block ${className}`}>
         <Card className="sticky top-4 p-6">
-          <FilterContent />
+          {filterContent}
         </Card>
       </aside>
 
@@ -117,7 +117,7 @@ export function FilterSidebar({
                 <X className="h-5 w-5" />
               </Button>
             </div>
-            <FilterContent />
+            {filterContent}
             <div className="mt-6">
               <Button
                 onClick={() => setIsMobileOpen(false)}

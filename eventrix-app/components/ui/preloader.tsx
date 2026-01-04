@@ -31,12 +31,11 @@ interface PreloaderProps {
 export default function Preloader({ onComplete }: PreloaderProps) {
  
   const [index, setIndex] = useState(0)
-  const [dimension, setDimension] = useState({ width: 0, height: 0 })
+  const [dimension] = useState(() => {
+    if (typeof window === "undefined") return { width: 0, height: 0 }
+    return { width: window.innerWidth, height: window.innerHeight }
+  })
   const [isExiting, setIsExiting] = useState(false)
-
-  useEffect(() => {
-    setDimension({ width: window.innerWidth, height: window.innerHeight })
-  }, [])
 
   useEffect(() => {
     if (index === words.length - 1) {

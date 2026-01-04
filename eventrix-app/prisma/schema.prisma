@@ -133,6 +133,7 @@ model Event {
   id              String      @id @default(cuid())
   title           String
   description     String      @db.Text
+  details         Json?
   date            DateTime
   time            String
   endTime         String?

@@ -5,6 +5,7 @@ import { env } from "@/lib/env";
 import PreloaderWrapper from "@/components/preloader-wrapper";
 import { NavbarDock } from "@/components/navbar-dock";
 import { SessionProvider } from "@/components/providers/session-provider";
+import { ToastProvider } from "@/components/providers/toast-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -65,10 +66,12 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}
       >
         <SessionProvider>
-          <NavbarDock />
-          <div>
-            <PreloaderWrapper>{children}</PreloaderWrapper>
-          </div>
+          <ToastProvider>
+            <NavbarDock />
+            <div>
+              <PreloaderWrapper>{children}</PreloaderWrapper>
+            </div>
+          </ToastProvider>
         </SessionProvider>
       </body>
     </html>

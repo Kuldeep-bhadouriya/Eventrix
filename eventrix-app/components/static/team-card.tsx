@@ -1,5 +1,6 @@
 import React from 'react';
 import { Card } from '@/components/ui/card';
+import { GlowCard } from '@/components/ui/spotlight-card';
 import { Github, Linkedin, Twitter, Mail } from 'lucide-react';
 
 interface TeamMember {
@@ -22,8 +23,12 @@ interface TeamCardProps {
 
 export function TeamCard({ member, className = '' }: TeamCardProps) {
   return (
-    <Card className={`overflow-hidden transition-all hover:shadow-lg ${className}`}>
-      <div className="flex flex-col items-center p-6">
+    <GlowCard 
+      customSize={true} 
+      glowColor="purple" 
+      className={`w-full h-full ${className}`}
+    >
+      <div className="flex flex-col items-center h-full justify-center">
         <div className="mb-4 h-32 w-32 overflow-hidden rounded-full">
           <img
             src={member.image}
@@ -87,6 +92,6 @@ export function TeamCard({ member, className = '' }: TeamCardProps) {
           </div>
         )}
       </div>
-    </Card>
+    </GlowCard>
   );
 }

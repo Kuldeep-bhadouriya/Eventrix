@@ -141,7 +141,7 @@ export function NavbarDock() {
             onClick={() => setDropdownOpen(!dropdownOpen)}
             className='focus:outline-none'
           >
-            <DockItem className='aspect-square rounded-full bg-gray-200 dark:bg-neutral-800 overflow-hidden w-12 h-12'>
+            <DockItem className='aspect-square rounded-full bg-gray-200 dark:bg-neutral-800 w-12 h-12'>
               <DockLabel>Profile</DockLabel>
               <DockIcon>
                 {user.avatar ? (

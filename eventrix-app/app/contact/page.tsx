@@ -1,6 +1,6 @@
 import React from 'react';
 import { Metadata } from 'next';
-import { SectionHeader, ContactForm, InfoCard } from '@/components/static';
+import { SectionHeader, ContactForm, InfoCard, FooterSection } from '@/components/static';
 import {
   Mail,
   Phone,
@@ -180,6 +180,7 @@ export default function ContactPage() {
           </div>
         </div>
       </section>
+      <FooterSection />
     </main>
   );
 }

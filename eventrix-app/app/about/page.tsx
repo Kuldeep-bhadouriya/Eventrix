@@ -6,6 +6,7 @@ import {
   SectionHeader,
   FeatureCard,
   TeamCard,
+  FooterSection,
 } from '@/components/static';
 import {
   Calendar,
@@ -225,6 +226,7 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
+      <FooterSection />
     </main>
   );
 }

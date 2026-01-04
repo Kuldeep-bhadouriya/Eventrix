@@ -31,17 +31,138 @@ function getInitials(name?: string | null): string {
   return name.substring(0, 2).toUpperCase();
 }
 
+type DockUser = {
+  avatar?: string | null;
+  name?: string | null;
+} | null | undefined;
+
+function ProfileButton({
+  isLoading,
+  isAuthenticated,
+  user,
+  dropdownOpen,
+  setDropdownOpen,
+  dropdownPosition,
+  buttonRef,
+  dropdownRef,
+  onLogout,
+}: {
+  isLoading: boolean;
+  isAuthenticated: boolean;
+  user: DockUser;
+  dropdownOpen: boolean;
+  setDropdownOpen: (open: boolean) => void;
+  dropdownPosition: { top: number; left: number };
+  buttonRef: React.RefObject<HTMLButtonElement | null>;
+  dropdownRef: React.RefObject<HTMLDivElement | null>;
+  onLogout: () => void | Promise<void>;
+}) {
+  if (isLoading) {
+    return (
+      <DockItem className='aspect-square rounded-full bg-gray-200 dark:bg-neutral-800'>
+        <DockLabel>Loading...</DockLabel>
+        <DockIcon>
+          <div className='h-full w-full animate-pulse bg-gray-300 dark:bg-neutral-700 rounded-full' />
+        </DockIcon>
+      </DockItem>
+    );
+  }
+
+  if (isAuthenticated && user) {
+    const canUsePortal = typeof document !== 'undefined';
+
+    return (
+      <>
+        <button 
+          ref={buttonRef}
+          onClick={() => setDropdownOpen(!dropdownOpen)}
+          className='focus:outline-none'
+        >
+          <DockItem className='aspect-square rounded-full bg-gray-200 dark:bg-neutral-800 w-12 h-12'>
+            <DockLabel>Profile</DockLabel>
+            <DockIcon>
+              {user.avatar ? (
+                <img 
+                  src={user.avatar} 
+                  alt={user.name || 'User'} 
+                  className='h-full w-full object-cover rounded-full scale-150'
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.style.display = 'none';
+                    const parent = target.parentElement;
+                    if (parent) {
+                      parent.innerHTML = `<div class="h-full w-full flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600 text-white font-semibold text-lg scale-150">${getInitials(user.name)}</div>`;
+                    }
+                  }}
+                />
+              ) : (
+                <div className='h-full w-full flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600 text-white font-semibold text-lg scale-150'>
+                  {getInitials(user.name)}
+                </div>
+              )}
+            </DockIcon>
+          </DockItem>
+        </button>
+
+        {canUsePortal && dropdownOpen && createPortal(
+          <div 
+            ref={dropdownRef}
+            className='fixed w-48 bg-white dark:bg-neutral-800 rounded-lg shadow-xl border border-gray-200 dark:border-neutral-700 overflow-hidden z-[9999]'
+            style={{
+              top: `${dropdownPosition.top}px`,
+              left: `${dropdownPosition.left}px`,
+            }}
+          >
+            <Link 
+              href='/dashboard/profile'
+              onClick={() => setDropdownOpen(false)}
+              className='flex items-center gap-3 px-4 py-3 hover:bg-gray-100 dark:hover:bg-neutral-700 transition-colors'
+            >
+              <User className='h-4 w-4 text-neutral-600 dark:text-neutral-300' />
+              <span className='text-sm font-medium text-neutral-700 dark:text-neutral-200'>Profile</span>
+            </Link>
+            
+            <Link 
+              href='/dashboard/notifications'
+              onClick={() => setDropdownOpen(false)}
+              className='flex items-center gap-3 px-4 py-3 hover:bg-gray-100 dark:hover:bg-neutral-700 transition-colors'
+            >
+              <Bell className='h-4 w-4 text-neutral-600 dark:text-neutral-300' />
+              <span className='text-sm font-medium text-neutral-700 dark:text-neutral-200'>Notifications</span>
+            </Link>
+            
+            <button
+              onClick={onLogout}
+              className='w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-100 dark:hover:bg-neutral-700 transition-colors text-left border-t border-gray-200 dark:border-neutral-700'
+            >
+              <LogOut className='h-4 w-4 text-red-600 dark:text-red-400' />
+              <span className='text-sm font-medium text-red-600 dark:text-red-400'>Logout</span>
+            </button>
+          </div>,
+          document.body
+        )}
+      </>
+    );
+  }
+
+  return (
+    <Link href='/auth/login'>
+      <DockItem className='aspect-square rounded-full bg-white dark:bg-neutral-100 border-2 border-gray-300 dark:border-gray-400'>
+        <DockLabel>Login</DockLabel>
+        <DockIcon>
+          <ArrowRight className='h-full w-full text-black p-2' />
+        </DockIcon>
+      </DockItem>
+    </Link>
+  );
+}
+
 export function NavbarDock() {
   const { user, isAuthenticated, isLoading } = useAuth();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   // Update dropdown position when it opens
   useEffect(() => {
@@ -120,109 +241,6 @@ export function NavbarDock() {
     return [...publicItems, ...authenticatedItems].filter(item => item.show);
   }, [isAuthenticated, user?.role]);
 
-  // Profile/Login button component
-  const ProfileButton = () => {
-    if (isLoading) {
-      return (
-        <DockItem className='aspect-square rounded-full bg-gray-200 dark:bg-neutral-800'>
-          <DockLabel>Loading...</DockLabel>
-          <DockIcon>
-            <div className='h-full w-full animate-pulse bg-gray-300 dark:bg-neutral-700 rounded-full' />
-          </DockIcon>
-        </DockItem>
-      );
-    }
-
-    if (isAuthenticated && user) {
-      return (
-        <>
-          <button 
-            ref={buttonRef}
-            onClick={() => setDropdownOpen(!dropdownOpen)}
-            className='focus:outline-none'
-          >
-            <DockItem className='aspect-square rounded-full bg-gray-200 dark:bg-neutral-800 w-12 h-12'>
-              <DockLabel>Profile</DockLabel>
-              <DockIcon>
-                {user.avatar ? (
-                  <img 
-                    src={user.avatar} 
-                    alt={user.name || 'User'} 
-                    className='h-full w-full object-cover rounded-full scale-150'
-                    onError={(e) => {
-                      // Fallback to initials if image fails to load
-                      const target = e.target as HTMLImageElement;
-                      target.style.display = 'none';
-                      const parent = target.parentElement;
-                      if (parent) {
-                        parent.innerHTML = `<div class="h-full w-full flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600 text-white font-semibold text-lg scale-150">${getInitials(user.name)}</div>`;
-                      }
-                    }}
-                  />
-                ) : (
-                  <div className='h-full w-full flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600 text-white font-semibold text-lg scale-150'>
-                    {getInitials(user.name)}
-                  </div>
-                )}
-              </DockIcon>
-            </DockItem>
-          </button>
-
-          {/* Dropdown Menu - Rendered via Portal */}
-          {mounted && dropdownOpen && createPortal(
-            <div 
-              ref={dropdownRef}
-              className='fixed w-48 bg-white dark:bg-neutral-800 rounded-lg shadow-xl border border-gray-200 dark:border-neutral-700 overflow-hidden z-[9999]'
-              style={{
-                top: `${dropdownPosition.top}px`,
-                left: `${dropdownPosition.left}px`,
-              }}
-            >
-              <Link 
-                href='/dashboard/profile'
-                onClick={() => setDropdownOpen(false)}
-                className='flex items-center gap-3 px-4 py-3 hover:bg-gray-100 dark:hover:bg-neutral-700 transition-colors'
-              >
-                <User className='h-4 w-4 text-neutral-600 dark:text-neutral-300' />
-                <span className='text-sm font-medium text-neutral-700 dark:text-neutral-200'>Profile</span>
-              </Link>
-              
-              <Link 
-                href='/dashboard/notifications'
-                onClick={() => setDropdownOpen(false)}
-                className='flex items-center gap-3 px-4 py-3 hover:bg-gray-100 dark:hover:bg-neutral-700 transition-colors'
-              >
-                <Bell className='h-4 w-4 text-neutral-600 dark:text-neutral-300' />
-                <span className='text-sm font-medium text-neutral-700 dark:text-neutral-200'>Notifications</span>
-              </Link>
-              
-              <button
-                onClick={handleLogout}
-                className='w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-100 dark:hover:bg-neutral-700 transition-colors text-left border-t border-gray-200 dark:border-neutral-700'
-              >
-                <LogOut className='h-4 w-4 text-red-600 dark:text-red-400' />
-                <span className='text-sm font-medium text-red-600 dark:text-red-400'>Logout</span>
-              </button>
-            </div>,
-            document.body
-          )}
-        </>
-      );
-    }
-
-    // Not authenticated - show login button
-    return (
-      <Link href='/auth/login'>
-        <DockItem className='aspect-square rounded-full bg-white dark:bg-neutral-100 border-2 border-gray-300 dark:border-gray-400'>
-          <DockLabel>Login</DockLabel>
-          <DockIcon>
-            <ArrowRight className='h-full w-full text-black p-2' />
-          </DockIcon>
-        </DockItem>
-      </Link>
-    );
-  };
-
   return (
     <>
       <div className='fixed top-4 md:top-0 left-1/2 -translate-x-1/2 z-50 max-w-full pb-12 overflow-visible'>
@@ -235,7 +253,17 @@ export function NavbarDock() {
               </DockItem>
             </Link>
           ))}
-          <ProfileButton />
+          <ProfileButton
+            isLoading={isLoading}
+            isAuthenticated={isAuthenticated}
+            user={user}
+            dropdownOpen={dropdownOpen}
+            setDropdownOpen={setDropdownOpen}
+            dropdownPosition={dropdownPosition}
+            buttonRef={buttonRef}
+            dropdownRef={dropdownRef}
+            onLogout={handleLogout}
+          />
         </Dock>
       </div>
     </>

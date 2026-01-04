@@ -1,5 +1,4 @@
 import React from 'react';
-import { Card } from '@/components/ui/card';
 import { GlowCard } from '@/components/ui/spotlight-card';
 import { Github, Linkedin, Twitter, Mail } from 'lucide-react';
 

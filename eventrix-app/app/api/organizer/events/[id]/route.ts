@@ -30,7 +30,6 @@ export const GET = handleApiError(async (_req: Request, ctx: { params: Promise<{
       id: true,
       title: true,
       description: true,
-      details: true,
       date: true,
       time: true,
       endTime: true,

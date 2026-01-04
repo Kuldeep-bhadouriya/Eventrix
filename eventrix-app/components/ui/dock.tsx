@@ -89,10 +89,10 @@ function Dock({
   return (
     <motion.div
       style={{
-        height: maxHeight,
+        minHeight: maxHeight,
         scrollbarWidth: 'none',
       }}
-      className='mx-2 flex max-w-full items-center overflow-x-auto'
+      className='mx-2 flex max-w-full items-center overflow-visible'
     >
       <motion.div
         onMouseMove={({ pageX }) => {
@@ -102,7 +102,7 @@ function Dock({
           mouseX.set(Infinity);
         }}
         className={cn(
-          'mx-auto flex w-fit gap-4 rounded-2xl bg-gray-50 px-4 dark:bg-neutral-900',
+          'mx-auto flex w-fit gap-4 rounded-2xl bg-gray-50 px-4 dark:bg-neutral-900 overflow-visible',
           className
         )}
         style={{ height: panelHeight }}

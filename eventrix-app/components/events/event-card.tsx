@@ -32,131 +32,124 @@ export function EventCard({ event, className = '' }: EventCardProps) {
 
   return (
     <Card
-      className={`group overflow-hidden transition-all hover:shadow-xl ${className}`}
+      className={`group overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-xl dark:glass-effect dark:border-white/10 dark:bg-white/10 ${className}`}
     >
-      {/* Banner Image */}
-      <div className="relative h-48 overflow-hidden bg-gradient-to-br from-blue-500 to-purple-600">
+      {/* Media Header */}
+      <div className="relative aspect-[16/9] overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/70 via-indigo-600/60 to-purple-600/70" />
         {event.bannerUrl ? (
           <img
             src={event.bannerUrl}
             alt={event.title}
-            className="h-full w-full object-cover transition-transform group-hover:scale-105"
+            className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center text-6xl">
+          <div className="absolute inset-0 flex items-center justify-center text-6xl text-white/90">
             {getCategoryIcon(event.category)}
           </div>
         )}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/10 to-black/60" />
 
-        {/* Category Badge */}
-        <div className="absolute left-3 top-3">
-          <span className="inline-flex items-center rounded-full bg-white/90 px-3 py-1 text-xs font-medium text-gray-900 backdrop-blur-sm">
-            {getCategoryIcon(event.category)} {getCategoryLabel(event.category)}
+        {/* Top chips */}
+        <div className="absolute left-3 top-3 flex flex-wrap items-center gap-2">
+          <span className="inline-flex items-center gap-2 rounded-full bg-white/90 px-3 py-1 text-xs font-medium text-gray-900 backdrop-blur-sm dark:bg-white/10 dark:text-white">
+            {getCategoryIcon(event.category)}
+            <span>{getCategoryLabel(event.category)}</span>
           </span>
         </div>
 
-        {/* Status Badge */}
         <div className="absolute right-3 top-3">
           <span
-            className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${
+            className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold backdrop-blur-sm ${
               statusInfo.color === 'green'
-                ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
+                ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-200'
                 : statusInfo.color === 'red'
-                ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
-                : statusInfo.color === 'yellow'
-                ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400'
-                : statusInfo.color === 'blue'
-                ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400'
-                : 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400'
+                  ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-200'
+                  : statusInfo.color === 'yellow'
+                    ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-200'
+                    : statusInfo.color === 'blue'
+                      ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-200'
+                      : 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-200'
             }`}
           >
             {statusInfo.status}
           </span>
         </div>
+
+        {/* Bottom title overlay */}
+        <div className="absolute bottom-0 left-0 right-0 p-4">
+          <h3 className="line-clamp-2 text-lg font-semibold leading-snug text-white sm:text-xl">
+            {event.title}
+          </h3>
+        </div>
       </div>
 
       {/* Content */}
-      <div className="p-6">
-        {/* Title */}
-        <h3 className="mb-2 line-clamp-2 text-xl font-bold text-gray-900 dark:text-white">
-          {event.title}
-        </h3>
-
+      <div className="space-y-4 px-5 pb-5 pt-4">
         {/* Description */}
-        <p className="mb-4 line-clamp-2 text-sm text-gray-600 dark:text-gray-300">
+        <p className="line-clamp-2 text-sm text-gray-600 dark:text-white/75">
           {event.description}
         </p>
 
-        {/* Event Details */}
-        <div className="space-y-2">
-          {/* Date and Time */}
-          <div className="flex items-center text-sm text-gray-600 dark:text-gray-300">
-            <Calendar className="mr-2 h-4 w-4 shrink-0 text-primary" />
-            <span>
-              {formatEventDate(event.date, 'EEE, MMM d, yyyy')}
-            </span>
+        {/* Meta pills */}
+        <div className="flex flex-wrap gap-2">
+          <div className="inline-flex items-center gap-2 rounded-full bg-gray-100 px-3 py-1 text-xs text-gray-700 dark:bg-white/10 dark:text-white/85">
+            <Calendar className="h-4 w-4 text-gray-500 dark:text-white/70" />
+            <span>{formatEventDate(event.date, 'EEE, MMM d')}</span>
           </div>
-
-          <div className="flex items-center text-sm text-gray-600 dark:text-gray-300">
-            <Clock className="mr-2 h-4 w-4 shrink-0 text-primary" />
+          <div className="inline-flex items-center gap-2 rounded-full bg-gray-100 px-3 py-1 text-xs text-gray-700 dark:bg-white/10 dark:text-white/85">
+            <Clock className="h-4 w-4 text-gray-500 dark:text-white/70" />
             <span>
               {event.time}
-              {duration && ` (${duration})`}
+              {duration ? ` · ${duration}` : ''}
             </span>
           </div>
-
-          {/* Venue */}
-          <div className="flex items-center text-sm text-gray-600 dark:text-gray-300">
-            <MapPin className="mr-2 h-4 w-4 shrink-0 text-primary" />
+          <div className="inline-flex max-w-full items-center gap-2 rounded-full bg-gray-100 px-3 py-1 text-xs text-gray-700 dark:bg-white/10 dark:text-white/85">
+            <MapPin className="h-4 w-4 shrink-0 text-gray-500 dark:text-white/70" />
             <span className="line-clamp-1">{event.venue}</span>
-          </div>
-
-          {/* Capacity */}
-          <div className="flex items-center text-sm text-gray-600 dark:text-gray-300">
-            <Users className="mr-2 h-4 w-4 shrink-0 text-primary" />
-            <span>
-              {event.registeredCount} / {event.capacity} registered
-            </span>
           </div>
         </div>
 
-        {/* Capacity Progress Bar */}
-        <div className="mt-4">
-          <div className="mb-1 flex items-center justify-between text-xs text-gray-600 dark:text-gray-300">
-            <span>Capacity</span>
+        {/* Capacity */}
+        <div className="space-y-2">
+          <div className="flex items-center justify-between text-xs text-gray-600 dark:text-white/70">
+            <div className="flex items-center gap-2">
+              <Users className="h-4 w-4 text-gray-500 dark:text-white/70" />
+              <span>
+                {event.registeredCount} / {event.capacity} registered
+              </span>
+            </div>
             <span>{capacityPercentage}%</span>
           </div>
-          <div className="h-2 w-full overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
+          <div className="h-1.5 w-full overflow-hidden rounded-full bg-gray-200 dark:bg-white/15">
             <div
               className={`h-full transition-all ${
                 capacityPercentage >= 100
                   ? 'bg-red-500'
                   : capacityPercentage >= 80
-                  ? 'bg-yellow-500'
-                  : 'bg-green-500'
+                    ? 'bg-yellow-500'
+                    : 'bg-green-500'
               }`}
               style={{ width: `${Math.min(capacityPercentage, 100)}%` }}
             />
           </div>
           {remainingSeats > 0 && remainingSeats <= 10 && (
-            <p className="mt-1 text-xs text-orange-600 dark:text-orange-400">
+            <p className="text-xs text-orange-600 dark:text-orange-200">
               Only {remainingSeats} seats left!
             </p>
           )}
         </div>
 
-        {/* Action Button */}
-        <div className="mt-6">
-          <Link href={`/events/${event.id}`}>
-            <Button
-              className="w-full"
-              variant={statusInfo.canRegister ? 'default' : 'outline'}
-            >
-              View Details
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-          </Link>
-        </div>
+        {/* CTA */}
+        <Link href={`/events/${event.id}`} className="block">
+          <Button
+            className="w-full border border-gray-300 bg-transparent text-gray-900 hover:bg-gray-50 dark:glass-effect dark:border-white/20 dark:bg-white/10 dark:text-white dark:hover:bg-white/20"
+            variant={statusInfo.canRegister ? 'default' : 'outline'}
+          >
+            View Details
+            <ArrowRight className="ml-1 h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
+          </Button>
+        </Link>
       </div>
     </Card>
   );

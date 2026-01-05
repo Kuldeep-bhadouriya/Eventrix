@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
   EventCard,
   EventCardSkeleton,
@@ -10,9 +11,11 @@ import {
   SortDropdown,
 } from '@/components/events';
 import { Button } from '@/components/ui/button';
+import { FooterSection } from '@/components/static';
 import { EventCategory, EventStatus, EventListResponse } from '@/types/events';
 import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
 import { format, startOfWeek, endOfWeek, startOfMonth, endOfMonth } from 'date-fns';
+import { WebGLShader } from '@/components/ui/web-gl-shader';
 
 function EventsPageContent() {
   const router = useRouter();
@@ -126,7 +129,7 @@ function EventsPageContent() {
     } finally {
       setIsLoading(false);
     }
-  }, [search, category, status, dateRange, dateFrom, dateTo, sort, order, page, getDateRange]);
+  }, [search, category, status, sort, order, page, getDateRange]);
 
   useEffect(() => {
     fetchEvents();
@@ -138,167 +141,245 @@ function EventsPageContent() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-white to-gray-50 dark:from-gray-950 dark:to-gray-900">
-      {/* Header */}
-      <section className="border-b bg-white dark:bg-gray-900">
-        <div className="container mx-auto px-4 py-8 sm:px-6 lg:px-8">
-          <div className="mb-6">
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
+    <main className="relative min-h-screen">
+      <WebGLShader />
+
+      {/* Hero */}
+      <section className="relative overflow-hidden py-16 sm:py-20">
+        <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]" />
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-4xl text-center">
+            <motion.h1
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: 'easeOut' }}
+              className="text-4xl font-bold tracking-tight text-white sm:text-5xl"
+            >
               Discover Events
-            </h1>
-            <p className="mt-2 text-lg text-gray-600 dark:text-gray-300">
-              Find and join amazing events happening around you
-            </p>
-          </div>
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.55, ease: 'easeOut', delay: 0.05 }}
+              className="mt-6 text-lg text-gray-200"
+            >
+              Find and join amazing events happening around you.
+            </motion.p>
 
-          {/* Search and Sort */}
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <SearchBar
-              value={search}
-              onChange={(value) => updateFilters({ search: value })}
-              onClear={() => updateFilters({ search: '' })}
-              placeholder="Search events by title, description, or venue..."
-              className="sm:w-96"
-            />
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: 'easeOut', delay: 0.1 }}
+              className="mt-10"
+            >
+              <div className="glass-effect mx-auto flex max-w-4xl flex-col gap-4 rounded-2xl bg-white/10 p-4 text-white sm:flex-row sm:items-center sm:justify-between sm:p-5">
+                <SearchBar
+                  value={search}
+                  onChange={(value) => updateFilters({ search: value })}
+                  onClear={() => updateFilters({ search: '' })}
+                  placeholder="Search events by title, description, or venue..."
+                  className="w-full sm:max-w-md"
+                  inputClassName="glass-effect h-11 border-white/30 bg-white/10 text-white placeholder:text-white/60 focus-visible:ring-white/30"
+                  iconClassName="text-white/60"
+                />
 
-            <SortDropdown
-              sortBy={sort}
-              order={order}
-              onSortChange={(newSort, newOrder) =>
-                updateFilters({ sort: newSort, order: newOrder })
-              }
-            />
+                <div className="flex w-full items-center justify-between gap-3 sm:w-auto">
+                  <SortDropdown
+                    sortBy={sort}
+                    order={order}
+                    onSortChange={(newSort, newOrder) =>
+                      updateFilters({ sort: newSort, order: newOrder })
+                    }
+                    labelClassName="text-white/80"
+                    selectClassName="glass-effect h-11 border-white/20 bg-gray-950/80 text-white focus-visible:ring-white/30"
+                    buttonClassName="glass-effect h-11 border-white/20 bg-gray-950/80 text-white hover:bg-gray-900/80"
+                  />
+                </div>
+              </div>
+            </motion.div>
           </div>
         </div>
       </section>
 
       {/* Main Content */}
-      <section className="py-8">
+      <section className="relative bg-background/50 backdrop-blur-sm pb-16 sm:pb-24">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex gap-8">
+          <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[280px_1fr]">
             {/* Filters Sidebar */}
-            <FilterSidebar
-              category={category}
-              status={status}
-              dateRange={dateRange}
-              dateFrom={dateFrom}
-              dateTo={dateTo}
-              onCategoryChange={(value) => updateFilters({ category: value })}
-              onStatusChange={(value) => updateFilters({ status: value })}
-              onDateRangeChange={(value) => updateFilters({ dateRange: value })}
-              onDateFromChange={(value) => updateFilters({ dateFrom: value })}
-              onDateToChange={(value) => updateFilters({ dateTo: value })}
-              onClearAll={clearAllFilters}
-              className="w-64"
-            />
+            <div>
+              <FilterSidebar
+                category={category}
+                status={status}
+                dateRange={dateRange}
+                dateFrom={dateFrom}
+                dateTo={dateTo}
+                onCategoryChange={(value) => updateFilters({ category: value })}
+                onStatusChange={(value) => updateFilters({ status: value })}
+                onDateRangeChange={(value) => updateFilters({ dateRange: value })}
+                onDateFromChange={(value) => updateFilters({ dateFrom: value })}
+                onDateToChange={(value) => updateFilters({ dateTo: value })}
+                onClearAll={clearAllFilters}
+                className="w-full"
+                cardClassName="glass-effect border-white/20 bg-white/10 text-white"
+                titleClassName="text-white"
+                controlLabelClassName="text-white/80"
+                optionTextClassName="text-white/80"
+                selectClassName="glass-effect h-11 border-white/20 bg-white/10 text-white focus-visible:ring-white/30"
+                dateInputClassName="glass-effect border-white/20 bg-white/10 text-white focus-visible:ring-white/30"
+                clearButtonClassName="text-white/80 hover:text-white"
+              />
+            </div>
 
-            {/* Events Grid */}
-            <div className="flex-1">
-              {/* Results Count */}
-              {data && !isLoading && (
-                <div className="mb-4 text-sm text-gray-600 dark:text-gray-300">
-                  Found {data.pagination.total} event{data.pagination.total !== 1 ? 's' : ''}
-                </div>
-              )}
-
-              {/* Loading State */}
-              {isLoading && (
-                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                  {Array.from({ length: 6 }).map((_, i) => (
-                    <EventCardSkeleton key={i} />
-                  ))}
-                </div>
-              )}
-
-              {/* Error State */}
-              {error && !isLoading && (
-                <div className="rounded-lg border border-red-200 bg-red-50 p-8 text-center dark:border-red-900 dark:bg-red-900/20">
-                  <p className="text-red-800 dark:text-red-400">{error}</p>
-                  <Button onClick={fetchEvents} variant="outline" className="mt-4">
-                    Try Again
-                  </Button>
-                </div>
-              )}
-
-              {/* Empty State */}
-              {!isLoading && !error && data && data.events.length === 0 && (
-                <div className="rounded-lg border border-gray-200 bg-white p-12 text-center dark:border-gray-800 dark:bg-gray-900">
-                  <Calendar className="mx-auto h-16 w-16 text-gray-400" />
-                  <h3 className="mt-4 text-lg font-semibold text-gray-900 dark:text-white">
-                    No events found
-                  </h3>
-                  <p className="mt-2 text-gray-600 dark:text-gray-300">
-                    Try adjusting your filters or search query
+            {/* Events */}
+            <div className="min-w-0">
+              <div className="mb-4 flex items-center justify-between gap-3">
+                {data && !isLoading ? (
+                  <p className="text-sm text-white/80">
+                    Found {data.pagination.total} event{data.pagination.total !== 1 ? 's' : ''}
                   </p>
-                  <Button onClick={clearAllFilters} variant="outline" className="mt-4">
-                    Clear Filters
-                  </Button>
-                </div>
-              )}
+                ) : (
+                  <span />
+                )}
+              </div>
 
-              {/* Events Grid */}
-              {!isLoading && !error && data && data.events.length > 0 && (
-                <>
-                  <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                    {data.events.map((event) => (
-                      <EventCard key={event.id} event={event} />
+              <AnimatePresence mode="wait">
+                {/* Loading State */}
+                {isLoading && (
+                  <motion.div
+                    key="loading"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+                  >
+                    {Array.from({ length: 6 }).map((_, i) => (
+                      <EventCardSkeleton key={i} />
                     ))}
-                  </div>
+                  </motion.div>
+                )}
 
-                  {/* Pagination */}
-                  {data.pagination.totalPages > 1 && (
-                    <div className="mt-8 flex items-center justify-center gap-2">
-                      <Button
-                        variant="outline"
-                        onClick={() => updateFilters({ page: (page - 1).toString() })}
-                        disabled={!data.pagination.hasPrev}
-                      >
-                        <ChevronLeft className="h-4 w-4" />
-                        Previous
-                      </Button>
+                {/* Error State */}
+                {error && !isLoading && (
+                  <motion.div
+                    key="error"
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 8 }}
+                    transition={{ duration: 0.25, ease: 'easeOut' }}
+                    className="glass-effect rounded-2xl border border-red-500/30 bg-red-500/10 p-8 text-center text-white"
+                  >
+                    <p className="text-white/90">{error}</p>
+                    <Button onClick={fetchEvents} variant="outline" className="mt-4">
+                      Try Again
+                    </Button>
+                  </motion.div>
+                )}
 
-                      <div className="flex items-center gap-1">
-                        {Array.from({ length: Math.min(5, data.pagination.totalPages) }, (_, i) => {
-                          let pageNum;
-                          if (data.pagination.totalPages <= 5) {
-                            pageNum = i + 1;
-                          } else if (page <= 3) {
-                            pageNum = i + 1;
-                          } else if (page >= data.pagination.totalPages - 2) {
-                            pageNum = data.pagination.totalPages - 4 + i;
-                          } else {
-                            pageNum = page - 2 + i;
-                          }
+                {/* Empty State */}
+                {!isLoading && !error && data && data.events.length === 0 && (
+                  <motion.div
+                    key="empty"
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 8 }}
+                    transition={{ duration: 0.25, ease: 'easeOut' }}
+                    className="glass-effect rounded-2xl border border-white/10 bg-white/10 p-12 text-center text-white"
+                  >
+                    <Calendar className="mx-auto h-16 w-16 text-white/60" />
+                    <h3 className="mt-4 text-lg font-semibold text-white">No events found</h3>
+                    <p className="mt-2 text-white/80">Try adjusting your filters or search query.</p>
+                    <Button onClick={clearAllFilters} variant="outline" className="mt-4">
+                      Clear Filters
+                    </Button>
+                  </motion.div>
+                )}
 
-                          return (
-                            <Button
-                              key={pageNum}
-                              variant={page === pageNum ? 'default' : 'outline'}
-                              onClick={() => updateFilters({ page: pageNum.toString() })}
-                              className="h-10 w-10 p-0"
-                            >
-                              {pageNum}
-                            </Button>
-                          );
-                        })}
-                      </div>
-
-                      <Button
-                        variant="outline"
-                        onClick={() => updateFilters({ page: (page + 1).toString() })}
-                        disabled={!data.pagination.hasNext}
-                      >
-                        Next
-                        <ChevronRight className="h-4 w-4" />
-                      </Button>
+                {/* Events Grid */}
+                {!isLoading && !error && data && data.events.length > 0 && (
+                  <motion.div
+                    key="grid"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                      {data.events.map((event, index) => (
+                        <motion.div
+                          key={event.id}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.35, ease: 'easeOut', delay: Math.min(index * 0.03, 0.18) }}
+                          className="hover-lift"
+                        >
+                          <EventCard event={event} />
+                        </motion.div>
+                      ))}
                     </div>
-                  )}
-                </>
-              )}
+
+                    {/* Pagination */}
+                    {data.pagination.totalPages > 1 && (
+                      <div className="mt-10 flex flex-wrap items-center justify-center gap-2">
+                        <Button
+                          variant="outline"
+                          onClick={() => updateFilters({ page: (page - 1).toString() })}
+                          disabled={!data.pagination.hasPrev}
+                        >
+                          <ChevronLeft className="h-4 w-4" />
+                          Previous
+                        </Button>
+
+                        <div className="flex items-center gap-1">
+                          {Array.from(
+                            { length: Math.min(5, data.pagination.totalPages) },
+                            (_, i) => {
+                              let pageNum;
+                              if (data.pagination.totalPages <= 5) {
+                                pageNum = i + 1;
+                              } else if (page <= 3) {
+                                pageNum = i + 1;
+                              } else if (page >= data.pagination.totalPages - 2) {
+                                pageNum = data.pagination.totalPages - 4 + i;
+                              } else {
+                                pageNum = page - 2 + i;
+                              }
+
+                              return (
+                                <Button
+                                  key={pageNum}
+                                  variant={page === pageNum ? 'default' : 'outline'}
+                                  onClick={() => updateFilters({ page: pageNum.toString() })}
+                                  className="h-10 w-10 p-0"
+                                >
+                                  {pageNum}
+                                </Button>
+                              );
+                            },
+                          )}
+                        </div>
+
+                        <Button
+                          variant="outline"
+                          onClick={() => updateFilters({ page: (page + 1).toString() })}
+                          disabled={!data.pagination.hasNext}
+                        >
+                          Next
+                          <ChevronRight className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    )}
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </div>
         </div>
       </section>
+
+      <div className="relative bg-background">
+        <FooterSection />
+      </div>
     </main>
   );
 }
@@ -307,28 +388,33 @@ export default function EventsPage() {
   return (
     <Suspense
       fallback={
-        <main className="min-h-screen bg-gradient-to-b from-white to-gray-50 dark:from-gray-950 dark:to-gray-900">
-          <section className="border-b bg-white dark:bg-gray-900">
-            <div className="container mx-auto px-4 py-8 sm:px-6 lg:px-8">
-              <div className="mb-6">
-                <h1 className="text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
+        <main className="relative min-h-screen">
+          <WebGLShader />
+          <section className="relative overflow-hidden py-16 sm:py-20">
+            <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]" />
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="mx-auto max-w-4xl text-center">
+                <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl">
                   Discover Events
                 </h1>
-                <p className="mt-2 text-lg text-gray-600 dark:text-gray-300">
-                  Find and join amazing events happening around you
+                <p className="mt-6 text-lg text-gray-200">
+                  Find and join amazing events happening around you.
                 </p>
               </div>
             </div>
           </section>
-          <section className="py-8">
+          <section className="relative bg-background/50 backdrop-blur-sm pb-16 sm:pb-24">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="mx-auto grid max-w-6xl gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {Array.from({ length: 6 }).map((_, i) => (
                   <EventCardSkeleton key={i} />
                 ))}
               </div>
             </div>
           </section>
+          <div className="relative bg-background">
+            <FooterSection />
+          </div>
         </main>
       }
     >

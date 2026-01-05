@@ -9,7 +9,7 @@ export function RelatedEvents({ events }: RelatedEventsProps) {
   return (
     <section className="space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Related Events</h3>
+        <h3 className="text-xl font-semibold text-white">Related Events</h3>
       </div>
       {events.length ? (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -18,7 +18,7 @@ export function RelatedEvents({ events }: RelatedEventsProps) {
           ))}
         </div>
       ) : (
-        <div className="rounded-xl border border-gray-200 bg-white p-6 text-sm text-gray-600 shadow-sm dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300">
+        <div className="glass-effect rounded-xl border border-white/10 bg-white/10 p-6 text-sm text-white/80">
           No related events available yet.
         </div>
       )}

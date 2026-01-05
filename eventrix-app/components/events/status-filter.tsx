@@ -8,9 +8,16 @@ import { Label } from '@/components/ui/label';
 interface StatusFilterProps {
   value: EventStatus | '';
   onChange: (value: EventStatus | '') => void;
+  labelClassName?: string;
+  selectClassName?: string;
 }
 
-export function StatusFilter({ value, onChange }: StatusFilterProps) {
+export function StatusFilter({
+  value,
+  onChange,
+  labelClassName = '',
+  selectClassName = '',
+}: StatusFilterProps) {
   // Filter to only show relevant statuses for public listing
   const publicStatuses = EVENT_STATUSES.filter(
     (status) =>
@@ -21,12 +28,14 @@ export function StatusFilter({ value, onChange }: StatusFilterProps) {
 
   return (
     <div className="space-y-2">
-      <Label htmlFor="status">Status</Label>
+      <Label htmlFor="status" className={labelClassName}>
+        Status
+      </Label>
       <select
         id="status"
         value={value}
         onChange={(e) => onChange(e.target.value as EventStatus | '')}
-        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-gray-900 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
+        className={`flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-gray-900 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 ${selectClassName}`}
       >
         <option value="">All Status</option>
         {publicStatuses.map((status) => (

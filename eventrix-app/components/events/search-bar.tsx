@@ -11,6 +11,8 @@ interface SearchBarProps {
   onClear: () => void;
   placeholder?: string;
   className?: string;
+  inputClassName?: string;
+  iconClassName?: string;
 }
 
 export function SearchBar({
@@ -19,18 +21,20 @@ export function SearchBar({
   onClear,
   placeholder = 'Search events...',
   className = '',
+  inputClassName = '',
+  iconClassName = '',
 }: SearchBarProps) {
   return (
     <div className={`relative ${className}`}>
       <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-        <Search className="h-5 w-5 text-gray-400" />
+        <Search className={`h-5 w-5 text-gray-400 ${iconClassName}`} />
       </div>
       <Input
         type="text"
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="pl-10 pr-10"
+        className={`pl-10 pr-10 ${inputClassName}`}
       />
       {value && (
         <Button

@@ -12,6 +12,9 @@ interface DateRangeFilterProps {
   dateTo?: string;
   onDateFromChange?: (date: string) => void;
   onDateToChange?: (date: string) => void;
+  labelClassName?: string;
+  optionTextClassName?: string;
+  dateInputClassName?: string;
 }
 
 export function DateRangeFilter({
@@ -21,10 +24,13 @@ export function DateRangeFilter({
   dateTo,
   onDateFromChange,
   onDateToChange,
+  labelClassName = '',
+  optionTextClassName = '',
+  dateInputClassName = '',
 }: DateRangeFilterProps) {
   return (
     <div className="space-y-3">
-      <Label>Date Range</Label>
+      <Label className={labelClassName}>Date Range</Label>
       
       <div className="space-y-2">
         <label className="flex items-center space-x-2">
@@ -36,7 +42,7 @@ export function DateRangeFilter({
             onChange={(e) => onChange(e.target.value as DateFilter)}
             className="h-4 w-4 border-gray-300 text-primary focus:ring-primary dark:border-gray-600"
           />
-          <span className="text-sm">All Upcoming</span>
+          <span className={`text-sm ${optionTextClassName}`}>All Upcoming</span>
         </label>
 
         <label className="flex items-center space-x-2">
@@ -48,7 +54,7 @@ export function DateRangeFilter({
             onChange={(e) => onChange(e.target.value as DateFilter)}
             className="h-4 w-4 border-gray-300 text-primary focus:ring-primary dark:border-gray-600"
           />
-          <span className="text-sm">Today</span>
+          <span className={`text-sm ${optionTextClassName}`}>Today</span>
         </label>
 
         <label className="flex items-center space-x-2">
@@ -60,7 +66,7 @@ export function DateRangeFilter({
             onChange={(e) => onChange(e.target.value as DateFilter)}
             className="h-4 w-4 border-gray-300 text-primary focus:ring-primary dark:border-gray-600"
           />
-          <span className="text-sm">This Week</span>
+          <span className={`text-sm ${optionTextClassName}`}>This Week</span>
         </label>
 
         <label className="flex items-center space-x-2">
@@ -72,7 +78,7 @@ export function DateRangeFilter({
             onChange={(e) => onChange(e.target.value as DateFilter)}
             className="h-4 w-4 border-gray-300 text-primary focus:ring-primary dark:border-gray-600"
           />
-          <span className="text-sm">This Month</span>
+          <span className={`text-sm ${optionTextClassName}`}>This Month</span>
         </label>
 
         <label className="flex items-center space-x-2">
@@ -84,7 +90,7 @@ export function DateRangeFilter({
             onChange={(e) => onChange(e.target.value as DateFilter)}
             className="h-4 w-4 border-gray-300 text-primary focus:ring-primary dark:border-gray-600"
           />
-          <span className="text-sm">Custom Range</span>
+          <span className={`text-sm ${optionTextClassName}`}>Custom Range</span>
         </label>
       </div>
 
@@ -99,7 +105,7 @@ export function DateRangeFilter({
               id="dateFrom"
               value={dateFrom || ''}
               onChange={(e) => onDateFromChange(e.target.value)}
-              className="mt-1 flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
+              className={`mt-1 flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 ${dateInputClassName}`}
             />
           </div>
           <div>
@@ -111,7 +117,7 @@ export function DateRangeFilter({
               id="dateTo"
               value={dateTo || ''}
               onChange={(e) => onDateToChange(e.target.value)}
-              className="mt-1 flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
+              className={`mt-1 flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 ${dateInputClassName}`}
             />
           </div>
         </div>

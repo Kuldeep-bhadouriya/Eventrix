@@ -22,6 +22,13 @@ interface FilterSidebarProps {
   onDateToChange?: (date: string) => void;
   onClearAll: () => void;
   className?: string;
+  cardClassName?: string;
+  titleClassName?: string;
+  controlLabelClassName?: string;
+  selectClassName?: string;
+  dateInputClassName?: string;
+  optionTextClassName?: string;
+  clearButtonClassName?: string;
 }
 
 export function FilterSidebar({
@@ -37,6 +44,13 @@ export function FilterSidebar({
   onDateToChange,
   onClearAll,
   className = '',
+  cardClassName = '',
+  titleClassName = '',
+  controlLabelClassName = '',
+  selectClassName = '',
+  dateInputClassName = '',
+  optionTextClassName = '',
+  clearButtonClassName = '',
 }: FilterSidebarProps) {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
@@ -45,20 +59,25 @@ export function FilterSidebar({
   const filterContent = (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold">Filters</h3>
+        <h3 className={`text-lg font-semibold ${titleClassName}`}>Filters</h3>
         {hasActiveFilters && (
           <Button
             variant="ghost"
             size="sm"
             onClick={onClearAll}
-            className="h-auto p-0 text-sm text-primary hover:underline"
+            className={`h-auto p-0 text-sm text-primary hover:underline ${clearButtonClassName}`}
           >
             Clear All
           </Button>
         )}
       </div>
 
-      <CategoryFilter value={category} onChange={onCategoryChange} />
+      <CategoryFilter
+        value={category}
+        onChange={onCategoryChange}
+        labelClassName={controlLabelClassName}
+        selectClassName={selectClassName}
+      />
 
       <DateRangeFilter
         value={dateRange}
@@ -67,9 +86,17 @@ export function FilterSidebar({
         dateTo={dateTo}
         onDateFromChange={onDateFromChange}
         onDateToChange={onDateToChange}
+        labelClassName={controlLabelClassName}
+        optionTextClassName={optionTextClassName}
+        dateInputClassName={dateInputClassName}
       />
 
-      <StatusFilter value={status} onChange={onStatusChange} />
+      <StatusFilter
+        value={status}
+        onChange={onStatusChange}
+        labelClassName={controlLabelClassName}
+        selectClassName={selectClassName}
+      />
     </div>
   );
 
@@ -94,7 +121,7 @@ export function FilterSidebar({
 
       {/* Desktop Sidebar */}
       <aside className={`hidden lg:block ${className}`}>
-        <Card className="sticky top-4 p-6">
+        <Card className={`sticky top-4 p-6 ${cardClassName}`}>
           {filterContent}
         </Card>
       </aside>
@@ -103,10 +130,10 @@ export function FilterSidebar({
       {isMobileOpen && (
         <div className="fixed inset-0 z-50 lg:hidden">
           <div
-            className="absolute inset-0 bg-black/50"
+            className="absolute inset-0 bg-black/60"
             onClick={() => setIsMobileOpen(false)}
           />
-          <div className="absolute bottom-0 left-0 right-0 max-h-[80vh] overflow-y-auto rounded-t-2xl bg-white p-6 dark:bg-gray-900">
+          <div className="glass-effect absolute bottom-0 left-0 right-0 max-h-[80vh] overflow-y-auto rounded-t-2xl border border-white/10 bg-white/10 p-6 text-white">
             <div className="mb-4 flex items-center justify-between">
               <h3 className="text-lg font-semibold">Filters</h3>
               <Button
@@ -121,7 +148,7 @@ export function FilterSidebar({
             <div className="mt-6">
               <Button
                 onClick={() => setIsMobileOpen(false)}
-                className="w-full"
+                className="w-full glass-effect border-white/20 bg-white/10 text-white hover:bg-white/20"
               >
                 Apply Filters
               </Button>

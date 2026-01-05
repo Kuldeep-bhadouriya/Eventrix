@@ -1,6 +1,7 @@
 import React from 'react';
 import { Metadata } from 'next';
 import { SectionHeader, ContactForm, InfoCard, FooterSection } from '@/components/static';
+import { WebGLShader } from '@/components/ui/web-gl-shader';
 import {
   Mail,
   Phone,
@@ -60,15 +61,17 @@ export default function ContactPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-white to-gray-50 dark:from-gray-950 dark:to-gray-900">
+    <main className="relative min-h-screen">
+      <WebGLShader />
       {/* Header Section */}
-      <section className="py-16 sm:py-20">
+      <section className="relative overflow-hidden py-16 sm:py-20">
+        <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]" />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-3xl text-center">
-            <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl">
+            <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl">
               Get in Touch
             </h1>
-            <p className="mt-6 text-lg text-gray-600 dark:text-gray-300">
+            <p className="mt-6 text-lg text-gray-200">
               Have questions? We&apos;d love to hear from you. Send us a message and
               we&apos;ll respond as soon as possible.
             </p>
@@ -77,7 +80,7 @@ export default function ContactPage() {
       </section>
 
       {/* Contact Form and Info Section */}
-      <section className="pb-16 sm:pb-24">
+      <section className="relative bg-background/50 backdrop-blur-sm pb-16 sm:pb-24">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-2">
             {/* Contact Form */}
@@ -111,32 +114,8 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* Map Section (Optional - placeholder) */}
-      <section className="bg-white py-16 dark:bg-gray-900">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeader
-            title="Visit Our Office"
-            subtitle="We'd love to meet you in person"
-            centered
-          />
-          <div className="mx-auto max-w-5xl">
-            <div className="relative h-96 overflow-hidden rounded-2xl bg-gray-200 dark:bg-gray-800">
-              {/* Placeholder for map - you can integrate Google Maps or other map service */}
-              <div className="flex h-full items-center justify-center">
-                <div className="text-center">
-                  <MapPin className="mx-auto h-16 w-16 text-gray-400" />
-                  <p className="mt-4 text-gray-600 dark:text-gray-400">
-                    Map integration coming soon
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* FAQ Section */}
-      <section className="py-16 sm:py-24">
+      <section className="relative py-16 sm:py-24">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-3xl">
             <SectionHeader
@@ -145,32 +124,32 @@ export default function ContactPage() {
               centered
             />
             <div className="space-y-6">
-              <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900">
-                <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
+              <div className="glass-effect rounded-lg border border-white/10 bg-white/10 p-6">
+                <h3 className="mb-2 text-lg font-semibold text-white">
                   What is Eventrix?
                 </h3>
-                <p className="text-gray-600 dark:text-gray-300">
+                <p className="text-gray-200">
                   Eventrix is a comprehensive event management platform that
                   helps you create, manage, and track events of all sizes. From
                   small meetups to large conferences, we provide all the tools
                   you need.
                 </p>
               </div>
-              <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900">
-                <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
+              <div className="glass-effect rounded-lg border border-white/10 bg-white/10 p-6">
+                <h3 className="mb-2 text-lg font-semibold text-white">
                   How quickly do you respond to inquiries?
                 </h3>
-                <p className="text-gray-600 dark:text-gray-300">
+                <p className="text-gray-200">
                   We typically respond to all inquiries within 24 hours during
                   business days. For urgent matters, please call our support
                   line directly.
                 </p>
               </div>
-              <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900">
-                <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
+              <div className="glass-effect rounded-lg border border-white/10 bg-white/10 p-6">
+                <h3 className="mb-2 text-lg font-semibold text-white">
                   Do you offer custom solutions?
                 </h3>
-                <p className="text-gray-600 dark:text-gray-300">
+                <p className="text-gray-200">
                   Yes! We offer custom solutions for enterprise clients with
                   specific needs. Contact our sales team to discuss your
                   requirements.
@@ -180,7 +159,9 @@ export default function ContactPage() {
           </div>
         </div>
       </section>
-      <FooterSection />
+      <div className="relative bg-background">
+        <FooterSection />
+      </div>
     </main>
   );
 }

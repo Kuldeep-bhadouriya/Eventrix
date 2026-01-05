@@ -189,11 +189,11 @@ export default function AboutPage() {
               <div className="relative h-64 w-full max-w-2xl overflow-hidden rounded-2xl bg-gradient-to-br from-blue-500/20 to-purple-600/20 backdrop-blur-md border border-white/10 shadow-2xl">
                 <div className="flex h-full items-center justify-center">
                   <Image
-                    src="/assets/Icon.png"
+                    src="/Logo.svg"
                     alt="Eventrix"
-                    width={360}
-                    height={180}
-                    className="h-24 w-auto opacity-80"
+                    width={560}
+                    height={240}
+                    className="h-28 w-auto opacity-80 sm:h-32"
                     priority
                   />
                 </div>

@@ -79,7 +79,7 @@ export function ContactForm({ onSuccess, onError }: ContactFormProps) {
   };
 
   return (
-    <Card className="p-6">
+    <Card className="glass-effect bg-white/10 border-white/20 p-6 text-white">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="space-y-2">
           <Label htmlFor="name">
@@ -93,6 +93,7 @@ export function ContactForm({ onSuccess, onError }: ContactFormProps) {
             disabled={isSubmitting}
             aria-invalid={errors.name ? 'true' : 'false'}
             aria-describedby={errors.name ? 'name-error' : undefined}
+            className="glass-effect h-11 border-white/30 bg-white/10 text-white placeholder:text-white/60 focus-visible:ring-white/30"
           />
           {errors.name && (
             <p id="name-error" className="text-sm text-red-500" role="alert">
@@ -113,6 +114,7 @@ export function ContactForm({ onSuccess, onError }: ContactFormProps) {
             disabled={isSubmitting}
             aria-invalid={errors.email ? 'true' : 'false'}
             aria-describedby={errors.email ? 'email-error' : undefined}
+            className="glass-effect h-11 border-white/30 bg-white/10 text-white placeholder:text-white/60 focus-visible:ring-white/30"
           />
           {errors.email && (
             <p id="email-error" className="text-sm text-red-500" role="alert">
@@ -133,6 +135,7 @@ export function ContactForm({ onSuccess, onError }: ContactFormProps) {
             disabled={isSubmitting}
             aria-invalid={errors.subject ? 'true' : 'false'}
             aria-describedby={errors.subject ? 'subject-error' : undefined}
+            className="glass-effect h-11 border-white/30 bg-white/10 text-white placeholder:text-white/60 focus-visible:ring-white/30"
           />
           {errors.subject && (
             <p id="subject-error" className="text-sm text-red-500" role="alert">
@@ -151,7 +154,7 @@ export function ContactForm({ onSuccess, onError }: ContactFormProps) {
             placeholder="Your message..."
             {...register('message')}
             disabled={isSubmitting}
-            className="flex min-h-[120px] w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+            className="glass-effect flex min-h-[120px] w-full rounded-md border border-white/30 bg-white/10 px-3 py-2 text-base text-white placeholder:text-white/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
             aria-invalid={errors.message ? 'true' : 'false'}
             aria-describedby={errors.message ? 'message-error' : undefined}
           />
@@ -175,7 +178,11 @@ export function ContactForm({ onSuccess, onError }: ContactFormProps) {
           </div>
         )}
 
-        <Button type="submit" disabled={isSubmitting} className="w-full">
+        <Button
+          type="submit"
+          disabled={isSubmitting}
+          className="w-full glass-effect border-white/30 bg-white/10 text-white hover:bg-white/20"
+        >
           {isSubmitting ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />

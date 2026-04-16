@@ -117,4 +117,5 @@ export interface EventRegistrationStatus {
   registeredCount?: number;
   capacity?: number;
   requiresAuth?: boolean;
+  canRegister?: boolean;
 }

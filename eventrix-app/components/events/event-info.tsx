@@ -13,6 +13,9 @@ export function EventInfo({ event }: EventInfoProps) {
   const mapUrl =
     event.location?.mapUrl ||
     `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.venue)}`;
+  const mapEmbedUrl = `https://www.google.com/maps?q=${encodeURIComponent(
+    event.location?.address || event.venue,
+  )}&output=embed`;
   const remainingSeats = getRemainingSeats(event);
   const capacityPercentage = getCapacityPercentage(event);
 
@@ -49,6 +52,15 @@ export function EventInfo({ event }: EventInfoProps) {
           <div className="flex items-center gap-2">
             <MapPin className="h-4 w-4 text-primary" />
             <span>{event.location?.address || event.venue}</span>
+          </div>
+          <div className="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-800">
+            <iframe
+              title={`Map location for ${event.title}`}
+              src={mapEmbedUrl}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="h-40 w-full"
+            />
           </div>
           <Button asChild variant="outline" size="sm" className="mt-1 w-fit">
             <a href={mapUrl} target="_blank" rel="noreferrer">

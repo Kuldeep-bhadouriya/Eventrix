@@ -1,11 +1,9 @@
 import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import type { Metadata } from "next";
-import Link from "next/link";
 
 import { authOptions } from "@/lib/auth";
-import { EmptyState } from "@/components/dashboard/EmptyState";
-import { Button } from "@/components/ui/button";
+import { RegisteredEventsPanel } from "@/components/dashboard/events/RegisteredEventsPanel";
 
 export const metadata: Metadata = {
   title: "My Events",
@@ -16,14 +14,15 @@ export default async function DashboardEventsPage() {
   if (!session?.user?.id) redirect("/auth/login?callbackUrl=%2Fdashboard%2Fevents");
 
   return (
-    <EmptyState
-      title="My Events"
-      description="This page will list your registered events. Use the Event Pass link from an event to view your QR code pass."
-      action={
-        <Button asChild>
-          <Link href="/events">Browse events</Link>
-        </Button>
-      }
-    />
+    <div className="space-y-4">
+      <div>
+        <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">My Events</h1>
+        <p className="mt-1 text-sm text-gray-600 dark:text-gray-300">
+          Track your registrations, view passes, and manage attendance.
+        </p>
+      </div>
+
+      <RegisteredEventsPanel />
+    </div>
   );
 }

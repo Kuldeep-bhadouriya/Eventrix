@@ -17,3 +17,10 @@ export {
   useIsOrganizer,
   useIsStudent,
 } from "./use-auth";
+
+export {
+  useEvents,
+  useEvent,
+  useEventRegistration,
+  useRegisterEvent,
+} from './use-events';

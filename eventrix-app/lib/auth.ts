@@ -183,17 +183,26 @@ export const authOptions: NextAuthOptions = {
         }
       }
 
-      // Handle session update (when calling update() from client)
-      if (trigger === "update" && session) {
-        token.name = session.name;
-        token.avatar = session.avatar;
-        // Refresh profile completion status from database
-        const user = await prisma.user.findUnique({
+      // Handle session updates (when calling update() from client)
+      if (trigger === "update") {
+        if (session) {
+          if (session.name !== undefined) {
+            token.name = session.name;
+          }
+
+          if (session.avatar !== undefined) {
+            token.avatar = session.avatar;
+          }
+        }
+
+        // Always refresh profile completion from DB, even when update() has no payload.
+        const refreshedUser = await prisma.user.findUnique({
           where: { id: token.id },
           select: { profileCompleted: true },
         });
-        if (user) {
-          token.profileCompleted = user.profileCompleted;
+
+        if (refreshedUser) {
+          token.profileCompleted = refreshedUser.profileCompleted;
         }
       }
 

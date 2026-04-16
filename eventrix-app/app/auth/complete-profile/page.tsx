@@ -52,13 +52,13 @@ export default function CompleteProfilePage() {
         throw new Error(result.error || "Failed to update profile");
       }
 
-      // Update session to reflect profile completion
-      await update();
+      // Force a session update trigger so middleware gets fresh profileCompleted state.
+      await update({ profileCompleted: true });
 
       // Redirect to home page
       router.push("/");
-    } catch (error: any) {
-      setErrorMessage(error.message || "An unexpected error occurred");
+    } catch (error: unknown) {
+      setErrorMessage(error instanceof Error ? error.message : "An unexpected error occurred");
     } finally {
       setIsLoading(false);
     }

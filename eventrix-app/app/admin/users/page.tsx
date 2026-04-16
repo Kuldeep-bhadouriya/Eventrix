@@ -41,6 +41,7 @@ export default async function AdminUsersPage({
           }
         : {}),
       ...(roleFilter ? { role: roleFilter } : {}),
+      ...(statusFilter ? { status: statusFilter } : {}),
       ...(verified === "true" ? { emailVerified: { not: null } } : {}),
       ...(verified === "false" ? { emailVerified: null } : {}),
     };
@@ -54,6 +55,7 @@ export default async function AdminUsersPage({
         name: true,
         email: true,
         role: true,
+        status: true,
         avatar: true,
         emailVerified: true,
         createdAt: true,
@@ -66,7 +68,7 @@ export default async function AdminUsersPage({
       email: u.email,
       role: u.role,
       avatar: u.avatar,
-      status: "ACTIVE" as const,
+      status: u.status,
       emailVerified: Boolean(u.emailVerified),
       joinedAt: u.createdAt.toLocaleDateString(),
       lastActive: null,

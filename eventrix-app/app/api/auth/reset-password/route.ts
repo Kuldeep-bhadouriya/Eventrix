@@ -4,9 +4,13 @@ import {
   hashPassword,
   validatePasswordStrength,
 } from "@/lib/auth-utils";
+import { enforceMutationGuards } from "@/lib/security/request-guards";
 
 export async function POST(request: NextRequest) {
   try {
+    const guardResponse = await enforceMutationGuards(request, { rateLimit: "auth" });
+    if (guardResponse) return guardResponse;
+
     const body = await request.json();
     const { token, password } = body;
 

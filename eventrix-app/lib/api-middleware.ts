@@ -10,6 +10,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "./auth";
 import { UserRole } from "@prisma/client";
 import { checkPermission, hasAnyRole } from "./rbac";
+import * as Sentry from "@sentry/nextjs";
 
 /**
  * Standard API response format
@@ -331,6 +332,7 @@ export function withAuthApi(
       return await handler(request, session);
     } catch (error) {
       console.error("API Error:", error);
+      Sentry.captureException(error);
       return serverErrorResponse(
         error instanceof Error ? error.message : "Internal server error"
       );
@@ -376,6 +378,7 @@ export function withRoles(
       return await handler(request, session);
     } catch (error) {
       console.error("API Error:", error);
+      Sentry.captureException(error);
       return serverErrorResponse(
         error instanceof Error ? error.message : "Internal server error"
       );

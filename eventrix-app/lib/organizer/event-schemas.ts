@@ -56,7 +56,13 @@ export const organizerCreateEventSchema = z.object({
   venue: z.string().min(2).max(200),
   capacity: z.coerce.number().int().min(1).max(1_000_000),
   tags: z.array(z.string().max(50)).default([]),
-  bannerUrl: z.string().url().optional().or(z.literal("")),
+  bannerUrl: z
+    .union([
+      z.string().url(),
+      z.string().regex(/^\/[A-Za-z0-9._~\-/%]+$/),
+    ])
+    .optional()
+    .or(z.literal("")),
   details: organizerEventDetailsSchema.optional(),
   status: z.enum(["DRAFT", "PUBLISHED", "CLOSED", "COMPLETED"]).optional(),
 });

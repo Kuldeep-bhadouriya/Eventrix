@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { UserRole } from "@prisma/client";
+import { UserRole, UserStatus } from "@prisma/client";
 
 import { prisma } from "@/lib/db";
 import {
@@ -9,14 +9,19 @@ import {
   successResponse,
   validationErrorResponse,
 } from "@/lib/api-middleware";
+import { logAdminAction } from "@/lib/security/admin-audit";
+import { enforceMutationGuards } from "@/lib/security/request-guards";
 
 type RouteContext = { params: Promise<{ id: string }> };
 
-function isUserStatus(value: unknown): value is "ACTIVE" | "SUSPENDED" | "BANNED" {
-  return value === "ACTIVE" || value === "SUSPENDED" || value === "BANNED";
+function isUserStatus(value: unknown): value is UserStatus {
+  return value === UserStatus.ACTIVE || value === UserStatus.SUSPENDED || value === UserStatus.BANNED;
 }
 
 export async function PATCH(request: NextRequest, context: RouteContext) {
+  const guardResponse = await enforceMutationGuards(request, { rateLimit: "strict" });
+  if (guardResponse) return guardResponse;
+
   const session = await requireRole(UserRole.ADMIN);
   if (session instanceof NextResponse) return session;
 
@@ -50,21 +55,27 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
 
   const now = new Date();
 
-  // Note: User status fields (status, suspendedAt, bannedAt) are not in the database schema
-  // This endpoint returns success but doesn't persist the status change
-  // To enable this feature, add these fields to the User model in prisma/schema.prisma:
-  // status       String?   @default("ACTIVE")
-  // suspendedAt  DateTime? @db.Timestamptz(6)
-  // bannedAt     DateTime? @db.Timestamptz(6)
-  
-  // await prisma.user.update({
-  //   where: { id: userId },
-  //   data: {
-  //     status,
-  //     suspendedAt: status === "SUSPENDED" ? now : null,
-  //     bannedAt: status === "BANNED" ? now : null,
-  //   },
-  // });
+  await prisma.user.update({
+    where: { id: userId },
+    data: {
+      status,
+      suspendedAt: status === UserStatus.SUSPENDED ? now : null,
+      bannedAt: status === UserStatus.BANNED ? now : null,
+    },
+  });
+
+  if (actorId) {
+    await logAdminAction({
+      request,
+      adminId: actorId,
+      action: "USER_STATUS_CHANGED",
+      targetType: "user",
+      targetId: userId,
+      details: {
+        status,
+      },
+    });
+  }
 
   return successResponse({ updated: true });
 }

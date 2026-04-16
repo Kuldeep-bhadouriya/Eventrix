@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { UserRole } from "@prisma/client";
+import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/providers/toast-provider";
@@ -172,7 +173,7 @@ export function UsersTableClient({ initialUsers }: { initialUsers: AdminUserRow[
                   <td className="px-4 py-3">
                     <div className="flex items-center justify-end gap-2">
                       <Button asChild variant="outline" size="sm">
-                        <a href={`/admin/users/${u.id}`}>View</a>
+                        <Link href={`/admin/users/${u.id}`}>View</Link>
                       </Button>
                       <Button
                         variant="outline"

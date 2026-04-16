@@ -12,6 +12,7 @@ model User {
   email             String         @unique
   password          String?
   role              UserRole       @default(STUDENT)
+  status            UserStatus     @default(ACTIVE)
   avatar            String?
   emailVerified     DateTime?      @db.Timestamptz(6)
   profileCompleted  Boolean        @default(false)
@@ -19,6 +20,8 @@ model User {
   collegeRollNumber String?
   semester          String?
   department        String?
+  suspendedAt       DateTime?      @db.Timestamptz(6)
+  bannedAt          DateTime?      @db.Timestamptz(6)
   createdAt         DateTime       @default(now()) @db.Timestamptz(6)
   updatedAt         DateTime       @default(now()) @updatedAt @db.Timestamptz(6)
   accounts          Account[]
@@ -26,10 +29,14 @@ model User {
   notifications     Notification[]
   organizer         Organizer?
   registrations     Registration[]
+  submittedReports  Report[]
   sessions          Session[]
+  adminAuditLogs    AdminAuditLog[]
+  notificationCampaignsCreated NotificationCampaign[] @relation("NotificationCampaignCreator")
 
   @@index([email])
   @@index([role])
+  @@index([status])
   @@index([profileCompleted])
   @@map("users")
 }
@@ -111,6 +118,7 @@ model Event {
   updatedAt       DateTime       @default(now()) @updatedAt @db.Timestamptz(6)
   certificates    Certificate[]
   organizer       Organizer      @relation(fields: [organizerId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  reports         Report[]
   registrations   Registration[]
 
   @@index([organizerId])
@@ -157,23 +165,124 @@ model Certificate {
 model Notification {
   id        String   @id @default(cuid())
   userId    String
+  campaignId String?
   title     String
   message   String
   type      String
   read      Boolean  @default(false)
   createdAt DateTime @default(now()) @db.Timestamptz(6)
+  campaign  NotificationCampaign? @relation(fields: [campaignId], references: [id], onDelete: SetNull, onUpdate: NoAction)
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@index([userId])
+  @@index([campaignId])
   @@index([read])
   @@index([createdAt])
   @@map("notifications")
+}
+
+model NotificationCampaign {
+  id              String                     @id @default(cuid())
+  title           String
+  message         String
+  role            String
+  status          NotificationCampaignStatus @default(DRAFT)
+  scheduledFor    DateTime?                  @db.Timestamptz(6)
+  sentAt          DateTime?                  @db.Timestamptz(6)
+  recipientsCount Int                        @default(0)
+  createdById     String
+  createdAt       DateTime                   @default(now()) @db.Timestamptz(6)
+  updatedAt       DateTime                   @default(now()) @updatedAt @db.Timestamptz(6)
+  createdBy       User                       @relation("NotificationCampaignCreator", fields: [createdById], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  notifications   Notification[]
+
+  @@index([status])
+  @@index([scheduledFor])
+  @@index([createdAt])
+  @@map("notification_campaigns")
+}
+
+model Report {
+  id         String          @id @default(cuid())
+  reporterId String?
+  eventId    String?
+  entityType ReportEntityType
+  entityId   String
+  reason     String
+  message    String?
+  status     ReportStatus    @default(OPEN)
+  priority   ReportPriority  @default(MEDIUM)
+  adminNotes String?
+  resolvedAt DateTime?       @db.Timestamptz(6)
+  createdAt  DateTime        @default(now()) @db.Timestamptz(6)
+  updatedAt  DateTime        @default(now()) @updatedAt @db.Timestamptz(6)
+  event      Event?          @relation(fields: [eventId], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  reporter   User?           @relation(fields: [reporterId], references: [id], onDelete: SetNull, onUpdate: NoAction)
+
+  @@index([reporterId])
+  @@index([eventId])
+  @@index([entityType, entityId])
+  @@index([status])
+  @@index([priority])
+  @@index([createdAt])
+  @@map("reports")
+}
+
+model AdminSetting {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  category    String   @default("general")
+  value       Json
+  description String?
+  createdAt   DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt   DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@index([category])
+  @@map("admin_settings")
+}
+
+model EmailTemplate {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  subject   String
+  body      String
+  variables String[] @default([])
+  enabled   Boolean  @default(true)
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@map("email_templates")
+}
+
+model AdminAuditLog {
+  id         String   @id @default(cuid())
+  adminId    String
+  action     String
+  targetType String
+  targetId   String?
+  details    Json?
+  ipAddress  String?
+  userAgent  String?
+  createdAt  DateTime @default(now()) @db.Timestamptz(6)
+  admin      User     @relation(fields: [adminId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([adminId])
+  @@index([action])
+  @@index([targetType, targetId])
+  @@index([createdAt])
+  @@map("admin_audit_logs")
 }
 
 enum UserRole {
   STUDENT
   ORGANIZER
   ADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  BANNED
 }
 
 enum EventStatus {
@@ -186,5 +295,31 @@ enum EventStatus {
 enum RegistrationStatus {
   REGISTERED
   ATTENDED
+  CANCELLED
+}
+
+enum ReportEntityType {
+  EVENT
+  USER
+}
+
+enum ReportStatus {
+  OPEN
+  INVESTIGATING
+  RESOLVED
+  DISMISSED
+}
+
+enum ReportPriority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum NotificationCampaignStatus {
+  DRAFT
+  SCHEDULED
+  SENT
   CANCELLED
 }

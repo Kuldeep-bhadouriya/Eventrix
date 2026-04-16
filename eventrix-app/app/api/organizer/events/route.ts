@@ -110,14 +110,6 @@ export const POST = handleApiError(async (req: Request) => {
       organizerId: organizer.id,
       title: body.title,
       description: body.description,
-      ...(body.details !== undefined
-        ? {
-            details:
-              body.details === null
-                ? Prisma.DbNull
-                : (body.details as Prisma.InputJsonValue),
-          }
-        : {}),
       category: body.category,
       date: new Date(body.date),
       time: body.time,

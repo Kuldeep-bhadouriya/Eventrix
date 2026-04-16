@@ -37,8 +37,11 @@ export default async function AdminUserDetailPage({
       role: true,
       avatar: true,
       emailVerified: true,
+      status: true,
       profileCompleted: true,
       phone: true,
+      suspendedAt: true,
+      bannedAt: true,
       department: true,
       semester: true,
       createdAt: true,
@@ -74,8 +77,20 @@ export default async function AdminUserDetailPage({
               <dd className="text-gray-900 dark:text-gray-100">{user.emailVerified ? "Yes" : "No"}</dd>
             </div>
             <div className="flex justify-between gap-3">
+              <dt className="text-gray-600 dark:text-gray-300">Status</dt>
+              <dd className="text-gray-900 dark:text-gray-100">{user.status}</dd>
+            </div>
+            <div className="flex justify-between gap-3">
               <dt className="text-gray-600 dark:text-gray-300">Profile completed</dt>
               <dd className="text-gray-900 dark:text-gray-100">{user.profileCompleted ? "Yes" : "No"}</dd>
+            </div>
+            <div className="flex justify-between gap-3">
+              <dt className="text-gray-600 dark:text-gray-300">Suspended at</dt>
+              <dd className="text-gray-900 dark:text-gray-100">{user.suspendedAt ? user.suspendedAt.toLocaleString() : "-"}</dd>
+            </div>
+            <div className="flex justify-between gap-3">
+              <dt className="text-gray-600 dark:text-gray-300">Banned at</dt>
+              <dd className="text-gray-900 dark:text-gray-100">{user.bannedAt ? user.bannedAt.toLocaleString() : "-"}</dd>
             </div>
             <div className="flex justify-between gap-3">
               <dt className="text-gray-600 dark:text-gray-300">Phone</dt>
@@ -113,9 +128,9 @@ export default async function AdminUserDetailPage({
         </DashboardCard>
       </div>
 
-      <DashboardCard title="Admin Actions" description="Notes, suspension, ban, and impersonation">
+      <DashboardCard title="Admin Actions" description="Use Users page controls to change account status">
         <div className="text-sm text-gray-600 dark:text-gray-300">
-          Admin actions require additional user status and audit log fields. Tell me what user status fields you want (suspended/banned) and I’ll wire this up.
+          You can suspend, activate, ban, and unban from the main users table. This page is focused on profile and activity context.
         </div>
       </DashboardCard>
     </div>

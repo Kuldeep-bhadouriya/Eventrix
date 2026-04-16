@@ -1,6 +1,6 @@
 import { handleApiError, successResponse, validateBody } from "@/lib/api";
 import { prisma } from "@/lib/db";
-import { Prisma } from "@prisma/client";
+import { NotFoundError } from "@/lib/api";
 
 import { requireOrganizerApiSession } from "@/lib/organizer/api-auth";
 import { organizerCreateEventSchema } from "@/lib/organizer/event-schemas";
@@ -38,45 +38,37 @@ export const POST = handleApiError(async (req: Request) => {
   const data = body.data;
 
   const draft = body.draftId
-    ? await prisma.event.update({
-        where: { id: body.draftId },
-        data: {
-          organizerId: organizer.id,
-          title: data.title ?? "Untitled draft",
-          description: data.description ?? "",
-          ...(data.details !== undefined
-            ? {
-                details:
-                  data.details === null
-                    ? Prisma.DbNull
-                    : (data.details as Prisma.InputJsonValue),
-              }
-            : {}),
-          category: data.category ?? "OTHER",
-          date: data.date ? new Date(data.date) : new Date(),
-          time: data.time ?? "00:00",
-          endTime: data.endTime ?? undefined,
-          venue: data.venue ?? "TBD",
-          capacity: data.capacity ?? 1,
-          tags: data.tags ?? undefined,
-          bannerUrl: data.bannerUrl ? String(data.bannerUrl) : undefined,
-          status: "DRAFT",
-        },
-        select: { id: true },
-      })
+    ? await (async () => {
+        const existing = await prisma.event.findFirst({
+          where: { id: body.draftId, organizerId: organizer.id },
+          select: { id: true },
+        });
+        if (!existing) throw new NotFoundError("Draft", body.draftId);
+
+        return prisma.event.update({
+          where: { id: body.draftId },
+          data: {
+            organizerId: organizer.id,
+            title: data.title ?? "Untitled draft",
+            description: data.description ?? "",
+            category: data.category ?? "OTHER",
+            date: data.date ? new Date(data.date) : new Date(),
+            time: data.time ?? "00:00",
+            endTime: data.endTime ?? undefined,
+            venue: data.venue ?? "TBD",
+            capacity: data.capacity ?? 1,
+            tags: data.tags ?? undefined,
+            bannerUrl: data.bannerUrl ? String(data.bannerUrl) : undefined,
+            status: "DRAFT",
+          },
+          select: { id: true },
+        });
+      })()
     : await prisma.event.create({
         data: {
           organizerId: organizer.id,
           title: data.title ?? "Untitled draft",
           description: data.description ?? "",
-          ...(data.details !== undefined
-            ? {
-                details:
-                  data.details === null
-                    ? Prisma.DbNull
-                    : (data.details as Prisma.InputJsonValue),
-              }
-            : {}),
           category: data.category ?? "OTHER",
           date: data.date ? new Date(data.date) : new Date(),
           time: data.time ?? "00:00",

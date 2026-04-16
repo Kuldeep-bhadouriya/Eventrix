@@ -1,15 +1,20 @@
 import { prisma } from "@/lib/db";
 import { successResponse, withAuthApi } from "@/lib/api-middleware";
-import { Prisma, UserRole } from "@prisma/client";
+import { Prisma, UserRole, UserStatus } from "@prisma/client";
 
 export const GET = withAuthApi(async (request) => {
   const url = new URL(request.url);
   const q = (url.searchParams.get("q") ?? "").trim();
   const role = (url.searchParams.get("role") ?? "").trim();
   const verified = (url.searchParams.get("verified") ?? "").trim();
+  const status = (url.searchParams.get("status") ?? "").trim();
 
   const roleFilter = Object.values(UserRole).includes(role as UserRole)
     ? (role as UserRole)
+    : undefined;
+
+  const statusFilter = Object.values(UserStatus).includes(status as UserStatus)
+    ? (status as UserStatus)
     : undefined;
 
   const where: Prisma.UserWhereInput = {
@@ -22,6 +27,7 @@ export const GET = withAuthApi(async (request) => {
         }
       : {}),
     ...(roleFilter ? { role: roleFilter } : {}),
+    ...(statusFilter ? { status: statusFilter } : {}),
     ...(verified === "true" ? { emailVerified: { not: null } } : {}),
     ...(verified === "false" ? { emailVerified: null } : {}),
   };
@@ -35,6 +41,7 @@ export const GET = withAuthApi(async (request) => {
       name: true,
       email: true,
       role: true,
+      status: true,
       avatar: true,
       emailVerified: true,
       createdAt: true,

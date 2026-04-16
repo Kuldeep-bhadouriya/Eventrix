@@ -3,9 +3,13 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { profileCompletionSchema } from "@/lib/validation-schemas";
+import { enforceMutationGuards } from "@/lib/security/request-guards";
 
 export async function POST(request: NextRequest) {
   try {
+    const guardResponse = await enforceMutationGuards(request, { rateLimit: "moderate" });
+    if (guardResponse) return guardResponse;
+
     // Check if user is authenticated
     const session = await getServerSession(authOptions);
     

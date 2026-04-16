@@ -7,6 +7,8 @@ import {
   validationErrorResponse,
   withAuthApi,
 } from "@/lib/api-middleware";
+import { logAdminAction } from "@/lib/security/admin-audit";
+import { enforceMutationGuards } from "@/lib/security/request-guards";
 
 type BulkAction = "suspend" | "activate" | "ban" | "unban";
 
@@ -16,6 +18,9 @@ function isBulkAction(value: unknown): value is BulkAction {
 
 export const POST = withAuthApi(async (request, session) => {
   if (session instanceof Response) return session;
+
+  const guardResponse = await enforceMutationGuards(request, { rateLimit: "strict" });
+  if (guardResponse) return guardResponse;
 
   let body: unknown;
   try {
@@ -59,22 +64,30 @@ export const POST = withAuthApi(async (request, session) => {
 
   const status = statusMap[action];
 
-  // Note: User status fields (status, suspendedAt, bannedAt) are not in the database schema
-  // This endpoint returns success but doesn't persist the status change
-  // To enable this feature, add these fields to the User model in prisma/schema.prisma
+  const result = await prisma.user.updateMany({
+    where: { id: { in: userIds } },
+    data: {
+      status,
+      suspendedAt: status === "SUSPENDED" ? now : null,
+      bannedAt: status === "BANNED" ? now : null,
+    },
+  });
 
-  // const updateData = {
-  //   status,
-  //   suspendedAt: status === "SUSPENDED" ? now : null,
-  //   bannedAt: status === "BANNED" ? now : null,
-  // };
+  if (actorId) {
+    await logAdminAction({
+      request,
+      adminId: actorId,
+      action: "USER_BULK_ACTION",
+      targetType: "user",
+      details: {
+        action,
+        requestedCount: userIds.length,
+        updatedCount: result.count,
+      },
+    });
+  }
 
-  // const result = await prisma.user.updateMany({
-  //   where: { id: { in: userIds } },
-  //   data: updateData,
-  // });
-
-  return successResponse({ updatedCount: userIds.length });
+  return successResponse({ updatedCount: result.count });
 }, UserRole.ADMIN);
 
 export const runtime = "nodejs";

@@ -6,6 +6,7 @@
  */
 
 import { NextResponse } from 'next/server';
+import * as Sentry from '@sentry/nextjs';
 import { isApiError, toApiError } from './api-error';
 
 /**
@@ -98,6 +99,7 @@ export function errorResponse(
       stack: apiError.stack,
       requestId,
     });
+    Sentry.captureException(apiError);
   }
 
   return NextResponse.json(response, { status: apiError.statusCode });
@@ -180,6 +182,7 @@ export function handleApiError<T extends (...args: any[]) => Promise<NextRespons
     try {
       return await handler(...args);
     } catch (error) {
+      Sentry.captureException(error);
       return errorResponse(error);
     }
   }) as T;

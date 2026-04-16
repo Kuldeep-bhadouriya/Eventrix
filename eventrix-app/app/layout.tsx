@@ -6,6 +6,9 @@ import PreloaderWrapper from "@/components/preloader-wrapper";
 import { NavbarDock } from "@/components/navbar-dock";
 import { SessionProvider } from "@/components/providers/session-provider";
 import { ToastProvider } from "@/components/providers/toast-provider";
+import { WebVitalsReporter } from "@/components/providers/web-vitals-reporter";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -77,6 +80,9 @@ export default function RootLayout({
             </div>
           </ToastProvider>
         </SessionProvider>
+        <WebVitalsReporter />
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

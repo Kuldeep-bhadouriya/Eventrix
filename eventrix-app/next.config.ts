@@ -26,6 +26,7 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  transpilePackages: ["import-in-the-middle", "@opentelemetry/instrumentation"],
   images: {
     remotePatterns: [
       {

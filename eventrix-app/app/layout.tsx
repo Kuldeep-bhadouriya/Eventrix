@@ -4,6 +4,7 @@ import "./globals.css";
 import { env } from "@/lib/env";
 import PreloaderWrapper from "@/components/preloader-wrapper";
 import { NavbarDock } from "@/components/navbar-dock";
+import { MobileBottomNavbar } from "@/components/mobile-bottom-navbar";
 import { SessionProvider } from "@/components/providers/session-provider";
 import { ToastProvider } from "@/components/providers/toast-provider";
 import { WebVitalsReporter } from "@/components/providers/web-vitals-reporter";
@@ -74,8 +75,11 @@ export default function RootLayout({
       >
         <SessionProvider>
           <ToastProvider>
-            <NavbarDock />
-            <div>
+            <div className="hidden md:block">
+              <NavbarDock />
+            </div>
+            <MobileBottomNavbar />
+            <div className="pb-24 md:pb-0">
               <PreloaderWrapper>{children}</PreloaderWrapper>
             </div>
           </ToastProvider>

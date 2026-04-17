@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
+import { Prisma } from "@prisma/client";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { profileCompletionSchema } from "@/lib/validation-schemas";
@@ -34,18 +35,49 @@ export async function POST(request: NextRequest) {
 
     const { phone, collegeRollNumber, semester, department } = validationResult.data;
 
-    // Update user profile with new fields
-    // Note: If TypeScript shows an error here, restart the TS server - Prisma client has been regenerated
-    const updatedUser = await prisma.user.update({
-      where: { id: session.user.id },
-      data: {
-        phone,
+    const existingUserWithRollNumber = await prisma.user.findFirst({
+      where: {
         collegeRollNumber,
-        semester,
-        department,
-        profileCompleted: true,
+        NOT: { id: session.user.id },
       },
+      select: { id: true },
     });
+
+    if (existingUserWithRollNumber) {
+      return NextResponse.json(
+        { error: "This college roll number is already registered" },
+        { status: 409 }
+      );
+    }
+
+    let updatedUser;
+    try {
+      // Keep DB constraint handling for race conditions (two requests submitting same roll number at once).
+      updatedUser = await prisma.user.update({
+        where: { id: session.user.id },
+        data: {
+          phone,
+          collegeRollNumber,
+          semester,
+          department,
+          profileCompleted: true,
+        },
+      });
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === "P2002" &&
+        Array.isArray(error.meta?.target) &&
+        error.meta.target.includes("collegeRollNumber")
+      ) {
+        return NextResponse.json(
+          { error: "This college roll number is already registered" },
+          { status: 409 }
+        );
+      }
+
+      throw error;
+    }
 
     return NextResponse.json({
       message: "Profile completed successfully",

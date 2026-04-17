@@ -11,10 +11,11 @@ import { Label } from "@/components/ui/label";
 import { LiquidButton } from "@/components/ui/liquid-glass-button";
 import { WebGLShader } from "@/components/ui/web-gl-shader";
 import { profileCompletionSchema, ProfileCompletionFormData } from "@/lib/validation-schemas";
+import { getDashboardUrl } from "@/lib/utils-shared";
 
 export default function CompleteProfilePage() {
   const router = useRouter();
-  const { status, update } = useSession();
+  const { data: session, status, update } = useSession();
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -53,10 +54,11 @@ export default function CompleteProfilePage() {
       }
 
       // Force a session update trigger so middleware gets fresh profileCompleted state.
-      await update({ profileCompleted: true });
+      const updatedSession = await update({ profileCompleted: true });
 
-      // Redirect to home page
-      router.push("/");
+      const role = updatedSession?.user?.role ?? session?.user?.role;
+      const dashboardUrl = role ? getDashboardUrl(role) : "/dashboard";
+      router.push(dashboardUrl);
     } catch (error: unknown) {
       setErrorMessage(error instanceof Error ? error.message : "An unexpected error occurred");
     } finally {

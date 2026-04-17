@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, Suspense } from "react";
-import { signIn } from "next-auth/react";
+import { useEffect, useState, Suspense } from "react";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
@@ -19,6 +19,7 @@ function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const urlError = searchParams.get("error");
+  const { data: session, status: sessionStatus } = useSession();
 
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
@@ -122,6 +123,20 @@ function LoginForm() {
   };
 
   const displayError = errorMessage || getErrorMessage(urlError);
+
+  useEffect(() => {
+    if (sessionStatus !== "authenticated" || !session?.user) {
+      return;
+    }
+
+    if (!session.user.profileCompleted) {
+      router.push("/auth/complete-profile");
+      return;
+    }
+
+    const dashboardUrl = getDashboardUrl(session.user.role);
+    router.push(dashboardUrl);
+  }, [session, sessionStatus, router]);
 
   return (
     <div className="relative flex min-h-screen w-full items-center justify-center overflow-hidden p-4">

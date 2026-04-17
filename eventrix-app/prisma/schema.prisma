@@ -17,7 +17,7 @@ model User {
   emailVerified     DateTime?      @db.Timestamptz(6)
   profileCompleted  Boolean        @default(false)
   phone             String?
-  collegeRollNumber String?
+  collegeRollNumber String?        @unique
   semester          String?
   department        String?
   suspendedAt       DateTime?      @db.Timestamptz(6)

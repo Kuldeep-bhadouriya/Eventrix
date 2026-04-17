@@ -1,5 +1,6 @@
 import { getServerSession } from "next-auth";
 import { z } from "zod";
+import { Prisma } from "@prisma/client";
 
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
@@ -48,17 +49,45 @@ export const PUT = handleApiError(
 
     const body = await validateBody(req, updateSchema);
 
-    const updated = await prisma.user.update({
-      where: { id: session.user.id },
-      data: {
-        name: body.name,
-        phone: body.phone ?? null,
-        collegeRollNumber: body.collegeRollNumber ?? null,
-        semester: body.semester ?? null,
-        department: body.department ?? null,
-      },
-      select: { id: true },
-    });
+    if (body.collegeRollNumber) {
+      const existingUserWithRollNumber = await prisma.user.findFirst({
+        where: {
+          collegeRollNumber: body.collegeRollNumber,
+          NOT: { id: session.user.id },
+        },
+        select: { id: true },
+      });
+
+      if (existingUserWithRollNumber) {
+        throw new ConflictError("This college roll number is already registered");
+      }
+    }
+
+    let updated;
+    try {
+      updated = await prisma.user.update({
+        where: { id: session.user.id },
+        data: {
+          name: body.name,
+          phone: body.phone ?? null,
+          collegeRollNumber: body.collegeRollNumber ?? null,
+          semester: body.semester ?? null,
+          department: body.department ?? null,
+        },
+        select: { id: true },
+      });
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === "P2002" &&
+        Array.isArray(error.meta?.target) &&
+        error.meta.target.includes("collegeRollNumber")
+      ) {
+        throw new ConflictError("This college roll number is already registered");
+      }
+
+      throw error;
+    }
 
     log.info("Updated profile", { userId: updated.id });
     return successResponse({ ok: true });

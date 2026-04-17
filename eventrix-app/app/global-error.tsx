@@ -1,21 +1,16 @@
 "use client";
 
 import * as Sentry from "@sentry/nextjs";
+import Error from "next/error";
 import { useEffect } from "react";
 
-export default function GlobalError({
-  error,
-  reset,
-}: {
-  error: Error & { digest?: string };
-  reset: () => void;
-}) {
+export default function GlobalError({ error }: { error: Error }) {
   useEffect(() => {
     Sentry.captureException(error);
   }, [error]);
 
   return (
-    <html lang="en">
+    <html>
       <body className="flex min-h-screen items-center justify-center bg-gray-50 px-4 dark:bg-gray-950">
         <div className="max-w-md rounded-xl border border-gray-200 bg-white p-6 text-center shadow-sm dark:border-gray-800 dark:bg-gray-900">
           <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">Something went wrong</h2>

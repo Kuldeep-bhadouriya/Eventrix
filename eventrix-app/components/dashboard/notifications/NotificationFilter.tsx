@@ -21,7 +21,8 @@ export function NotificationFilter({
         <Button
           key={t.key}
           type="button"
-          variant={tab === t.key ? "secondary" : "outline"}
+          variant={tab === t.key ? "default" : "outline"}
+          size="sm"
           onClick={() => onTabChange(t.key)}
         >
           {t.label}

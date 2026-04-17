@@ -23,7 +23,7 @@ export function CertificateFilter({
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
       <div className="flex-1">
-        <label className="text-xs font-medium text-gray-600 dark:text-gray-300">Search</label>
+        <label className="text-xs font-medium text-slate-600 dark:text-slate-300">Search</label>
         <Input
           value={search}
           onChange={(e) => onSearchChange(e.target.value)}
@@ -33,9 +33,9 @@ export function CertificateFilter({
 
       <div className="flex flex-wrap gap-2">
         <div>
-          <label className="text-xs font-medium text-gray-600 dark:text-gray-300">Category</label>
+          <label className="text-xs font-medium text-slate-600 dark:text-slate-300">Category</label>
           <select
-            className="h-9 rounded-md border border-gray-300 bg-transparent px-3 text-sm text-gray-900 dark:border-gray-700 dark:text-gray-100"
+            className="h-9 rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-900 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
             value={category}
             onChange={(e) => onCategoryChange(e.target.value)}
           >
@@ -49,11 +49,11 @@ export function CertificateFilter({
         </div>
 
         <div>
-          <label className="text-xs font-medium text-gray-600 dark:text-gray-300">Sort</label>
+          <label className="text-xs font-medium text-slate-600 dark:text-slate-300">Sort</label>
           <select
-            className="h-9 rounded-md border border-gray-300 bg-transparent px-3 text-sm text-gray-900 dark:border-gray-700 dark:text-gray-100"
+            className="h-9 rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-900 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
             value={sort}
-            onChange={(e) => onSortChange(e.target.value as any)}
+            onChange={(e) => onSortChange(e.target.value as "date_desc" | "date_asc")}
           >
             <option value="date_desc">Newest</option>
             <option value="date_asc">Oldest</option>

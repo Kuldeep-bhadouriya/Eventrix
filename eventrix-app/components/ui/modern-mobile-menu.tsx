@@ -82,15 +82,20 @@ const InteractiveMenu: React.FC<InteractiveMenuProps> = ({
       const activeTextElement = textRefs.current[resolvedActiveIndex];
 
       if (activeItemElement && activeTextElement) {
-        const textWidth = activeTextElement.offsetWidth;
+        // `scrollWidth` remains stable even while the label is animating in.
+        const textWidth = Math.max(
+          activeTextElement.scrollWidth,
+          activeTextElement.offsetWidth
+        );
         activeItemElement.style.setProperty('--lineWidth', `${textWidth}px`);
       }
     };
 
-    setLineWidth();
+    const frameId = window.requestAnimationFrame(setLineWidth);
 
     window.addEventListener('resize', setLineWidth);
     return () => {
+      window.cancelAnimationFrame(frameId);
       window.removeEventListener('resize', setLineWidth);
     };
   }, [resolvedActiveIndex, finalItems]);

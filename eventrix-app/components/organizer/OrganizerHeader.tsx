@@ -34,9 +34,7 @@ export function OrganizerHeader({
         <div className="flex items-center gap-1">
           <NotificationBell unreadCount={unreadCount} />
           <OrganizerMenu
-            name={isLoading ? "Loading..." : (user?.name ?? null)}
-            email={user?.email ?? null}
-            imageUrl={user?.avatar ?? null}
+            email={isLoading ? "Loading..." : (user?.email ?? null)}
             roleLabel={roleLabel}
             showStudentSwitch={Boolean(user)}
           />

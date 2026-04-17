@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { authOptions } from "@/lib/auth";
 import { getUserNotifications } from "@/lib/dashboard/notifications-queries";
 import { NotificationList } from "@/components/dashboard/notifications/NotificationList";
+import { DashboardPageHeader } from "@/components/dashboard/DashboardPageHeader";
 
 export const metadata: Metadata = {
   title: "Notifications",
@@ -18,12 +19,11 @@ export default async function NotificationsPage() {
 
   return (
     <div className="space-y-4">
-      <div>
-        <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">Notifications</h1>
-        <p className="mt-1 text-sm text-gray-600 dark:text-gray-300">
-          Manage and keep track of updates.
-        </p>
-      </div>
+      <DashboardPageHeader
+        eyebrow="Updates"
+        title="Notifications"
+        description="Review platform updates and control read status with cleaner filtering and actions."
+      />
 
       <NotificationList initial={initial} />
     </div>

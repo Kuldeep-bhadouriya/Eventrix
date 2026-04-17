@@ -137,11 +137,11 @@ export function RegisteredEventsPanel() {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-col gap-3 rounded-xl border border-gray-200 bg-white/60 p-4 dark:border-gray-800 dark:bg-gray-950/40">
+      <div className="flex flex-col gap-3 rounded-2xl border border-slate-200/90 bg-white/85 p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900/70">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <EventTabs value={tab} onChange={setTab} />
           <div className="inline-flex items-center gap-2">
-            <label className="text-sm font-medium text-gray-700 dark:text-gray-300" htmlFor="dashboard-events-sort">
+            <label className="text-sm font-medium text-slate-700 dark:text-slate-300" htmlFor="dashboard-events-sort">
               Sort
             </label>
             <select
@@ -149,7 +149,7 @@ export function RegisteredEventsPanel() {
               value={sort}
               onChange={(event) => setSort(event.target.value as RegistrationSort)}
               disabled={loading}
-              className="h-9 rounded-md border border-gray-300 bg-white px-3 text-sm text-gray-900 outline-none ring-0 focus:border-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
+              className="h-9 rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-900 outline-none ring-0 transition focus:border-slate-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
             >
               <option value="date">Date</option>
               <option value="name">Name</option>
@@ -172,7 +172,7 @@ export function RegisteredEventsPanel() {
 
         <EventSearch value={searchInput} onChange={setSearchInput} onClear={() => setSearchInput("")} />
 
-        <div className="text-sm text-gray-600 dark:text-gray-300" aria-live="polite">
+        <div className="text-sm text-slate-600 dark:text-slate-300" aria-live="polite">
           {loading ? "Loading events..." : `${pagination.total} result${pagination.total === 1 ? "" : "s"}`}
         </div>
       </div>

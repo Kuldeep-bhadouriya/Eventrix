@@ -28,9 +28,9 @@ export function Breadcrumbs({ className }: { className?: string }) {
 
   return (
     <nav aria-label="Breadcrumb" className={cn("text-sm", className)}>
-      <ol className="flex flex-wrap items-center gap-1 text-gray-600 dark:text-gray-300">
+      <ol className="flex flex-wrap items-center gap-1 text-slate-600 dark:text-slate-300">
         {crumbs.length === 0 ? (
-          <li className="text-gray-900 dark:text-gray-100">Dashboard</li>
+          <li className="font-medium text-slate-900 dark:text-slate-100">Dashboard</li>
         ) : (
           crumbs.map((seg, idx) => {
             const href = buildHref(idx);
@@ -39,13 +39,15 @@ export function Breadcrumbs({ className }: { className?: string }) {
 
             return (
               <li key={href} className="flex items-center gap-1">
-                {idx !== 0 && <span className="px-1 text-gray-400">/</span>}
+                {idx !== 0 && <span className="px-1 text-slate-400">/</span>}
                 {isLast ? (
-                  <span className="font-medium text-gray-900 dark:text-gray-100">{label}</span>
+                  <span className="rounded-md bg-slate-200/70 px-1.5 py-0.5 font-medium text-slate-900 dark:bg-slate-800 dark:text-slate-100">
+                    {label}
+                  </span>
                 ) : (
                   <Link
                     href={href}
-                    className="hover:underline hover:text-gray-900 dark:hover:text-gray-100"
+                    className="hover:text-slate-900 hover:underline dark:hover:text-slate-100"
                   >
                     {label}
                   </Link>

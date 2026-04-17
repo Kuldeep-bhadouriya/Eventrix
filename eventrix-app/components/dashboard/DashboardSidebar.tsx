@@ -60,11 +60,18 @@ export function DashboardSidebar({
 
   return (
     <SideNavbar
-      title="Dashboard"
+      title="Student Dashboard"
       className={className}
       onNavigate={onNavigate}
-      hintTitle="Tip"
-      hintText="Use the sidebar to manage your events and profile."
+      brand={{
+        name: "Eventrix",
+        logoSrc: "/assets/Logo.png",
+        logoAlt: "Eventrix logo",
+        href: "/dashboard",
+        badge: "Student",
+      }}
+      hintTitle="Need help?"
+      hintText="Use My Events for passes, Certificates for proofs, and Profile to keep account details updated."
       items={items.map((item) => ({
         ...item,
         active: isActive(item.href),

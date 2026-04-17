@@ -9,25 +9,20 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-function initials(name?: string | null) {
-  if (!name) return "U";
-  const parts = name.trim().split(/\s+/).filter(Boolean);
-  const first = parts[0]?.[0] ?? "U";
-  const last = parts.length > 1 ? parts[parts.length - 1]?.[0] : "";
-  return (first + last).toUpperCase();
+function initialsFromEmail(email?: string | null) {
+  const localPart = email?.split("@")[0]?.trim() ?? "";
+  const cleaned = localPart.replace(/[^a-zA-Z0-9]/g, "");
+  if (!cleaned) return "U";
+  return cleaned.slice(0, 2).toUpperCase();
 }
 
 export function OrganizerMenu({
-  name,
   email,
-  imageUrl,
   roleLabel = "Organizer",
   showStudentSwitch = true,
   className,
 }: {
-  name?: string | null;
   email?: string | null;
-  imageUrl?: string | null;
   roleLabel?: string;
   showStudentSwitch?: boolean;
   className?: string;
@@ -36,7 +31,7 @@ export function OrganizerMenu({
   const rootRef = useRef<HTMLDivElement | null>(null);
   const router = useRouter();
 
-  const displayName = useMemo(() => name || email || "User", [name, email]);
+  const displayEmail = useMemo(() => email?.trim() || "User", [email]);
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -69,17 +64,12 @@ export function OrganizerMenu({
         aria-expanded={open}
       >
         <span className="inline-flex h-8 w-8 items-center justify-center overflow-hidden rounded-full border border-gray-200 bg-gray-50 text-xs font-semibold text-gray-700 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-200">
-          {imageUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={imageUrl} alt="" className="h-full w-full object-cover" />
-          ) : (
-            initials(displayName)
-          )}
+          {initialsFromEmail(displayEmail)}
         </span>
 
         <div className="hidden min-w-0 flex-col items-start md:flex">
           <span className="max-w-[14rem] truncate text-sm font-medium text-gray-900 dark:text-gray-100">
-            {displayName}
+            {displayEmail}
           </span>
           <span className="text-[11px] text-gray-600 dark:text-gray-300">{roleLabel}</span>
         </div>
@@ -93,12 +83,9 @@ export function OrganizerMenu({
           className="absolute right-0 z-50 mt-2 w-64 overflow-hidden rounded-md border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-950"
         >
           <div className="px-3 py-2">
-            <div className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-              {name || "User"}
+            <div className="truncate text-sm font-semibold text-gray-900 dark:text-gray-100">
+              {displayEmail}
             </div>
-            {email && (
-              <div className="truncate text-xs text-gray-600 dark:text-gray-300">{email}</div>
-            )}
             <div className="mt-1 text-[11px] text-gray-600 dark:text-gray-300">{roleLabel}</div>
           </div>
 

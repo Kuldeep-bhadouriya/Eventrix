@@ -28,7 +28,7 @@ export function ActivityTimeline({
     <DashboardCard
       title="Recent Activity"
       description="Registrations, certificates, and notifications"
-      className="border-gray-200 bg-white/70 dark:border-gray-800 dark:bg-gray-950/40"
+      className="border-slate-200/90 bg-white/90 dark:border-slate-800 dark:bg-slate-900/70"
     >
       {items.length === 0 ? (
         <EmptyState
@@ -42,11 +42,11 @@ export function ActivityTimeline({
               <div
                 className={cn(
                   "mt-0.5 flex h-8 w-8 items-center justify-center rounded-md border",
-                  "border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-950",
+                  "border-slate-200 bg-slate-50 dark:border-slate-700 dark:bg-slate-900",
                 )}
                 aria-hidden="true"
               >
-                <span className="text-gray-700 dark:text-gray-200">
+                <span className="text-slate-700 dark:text-slate-200">
                   <ActivityIcon type={item.type} />
                 </span>
               </div>
@@ -54,7 +54,7 @@ export function ActivityTimeline({
               <div className="min-w-0 flex-1">
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                    <div className="text-sm font-medium text-slate-900 dark:text-slate-100">
                       {item.href ? (
                         <Link href={item.href} className="hover:underline">
                           {item.title}
@@ -64,12 +64,12 @@ export function ActivityTimeline({
                       )}
                     </div>
                     {item.description && (
-                      <div className="mt-0.5 line-clamp-2 text-xs text-gray-600 dark:text-gray-300">
+                      <div className="mt-0.5 line-clamp-2 text-xs text-slate-600 dark:text-slate-300">
                         {item.description}
                       </div>
                     )}
                   </div>
-                  <div className="shrink-0 text-xs text-gray-500 dark:text-gray-400">
+                  <div className="shrink-0 text-xs text-slate-500 dark:text-slate-400">
                     {formatDistanceToNow(new Date(item.timestamp), { addSuffix: true })}
                   </div>
                 </div>

@@ -3,11 +3,11 @@
 import { useMemo } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import {
-  Briefcase,
-  Home,
   Calendar,
-  Settings,
-  Shield,
+  Home,
+  Info,
+  LayoutDashboard,
+  Mail,
 } from 'lucide-react';
 import {
   InteractiveMenu,
@@ -21,86 +21,86 @@ type NavItem = InteractiveMenuItem & {
 };
 
 const publicItems: NavItem[] = [
-  { label: 'home', icon: Home, href: '/', match: /^\/$/ },
+  { label: 'Home', icon: Home, href: '/', match: /^\/$/ },
   {
-    label: 'strategy',
-    icon: Briefcase,
-    href: '/auth/login',
-    match: /^\/dashboard(?:\/.*)?$/,
-  },
-  {
-    label: 'period',
+    label: 'Event',
     icon: Calendar,
     href: '/events',
     match: /^\/events(?:\/.*)?$/,
   },
   {
-    label: 'security',
-    icon: Shield,
-    href: '/auth/login',
-    match: /^\/dashboard\/notifications(?:\/.*)?$/,
+    label: 'About',
+    icon: Info,
+    href: '/about',
+    match: /^\/about(?:\/.*)?$/,
   },
   {
-    label: 'settings',
-    icon: Settings,
-    href: '/auth/login',
-    match: /^\/dashboard\/profile(?:\/.*)?$/,
+    label: 'Contact',
+    icon: Mail,
+    href: '/contact',
+    match: /^\/contact(?:\/.*)?$/,
+  },
+  {
+    label: 'Dashboard',
+    icon: LayoutDashboard,
+    href: '/dashboard',
+    match: /^\/dashboard(?:\/.*)?$/,
   },
 ];
 
 const studentItems: NavItem[] = [
-  { label: 'home', icon: Home, href: '/', match: /^\/$/ },
+  { label: 'Home', icon: Home, href: '/', match: /^\/$/ },
   {
-    label: 'strategy',
-    icon: Briefcase,
-    href: '/dashboard',
-    match: /^\/dashboard(?:\/.*)?$/,
-  },
-  {
-    label: 'period',
+    label: 'Event',
     icon: Calendar,
     href: '/events',
     match: /^\/events(?:\/.*)?$/,
   },
   {
-    label: 'security',
-    icon: Shield,
-    href: '/dashboard/notifications',
-    match: /^\/dashboard\/notifications(?:\/.*)?$/,
+    label: 'About',
+    icon: Info,
+    href: '/about',
+    match: /^\/about(?:\/.*)?$/,
   },
   {
-    label: 'settings',
-    icon: Settings,
-    href: '/dashboard/profile',
-    match: /^\/dashboard\/profile(?:\/.*)?$/,
+    label: 'Contact',
+    icon: Mail,
+    href: '/contact',
+    match: /^\/contact(?:\/.*)?$/,
+  },
+  {
+    label: 'Dashboard',
+    icon: LayoutDashboard,
+    href: '/dashboard',
+    match: /^\/dashboard(?:\/.*)?$/,
   },
 ];
 
 const organizerItems: NavItem[] = [
-  { label: 'home', icon: Home, href: '/', match: /^\/$/ },
+  { label: 'Home', icon: Home, href: '/', match: /^\/$/ },
   {
-    label: 'strategy',
-    icon: Briefcase,
-    href: '/organizer/dashboard',
-    match: /^\/organizer(?:\/.*)?$/,
-  },
-  {
-    label: 'period',
+    label: 'Event',
     icon: Calendar,
     href: '/events',
     match: /^\/events(?:\/.*)?$/,
   },
   {
-    label: 'security',
-    icon: Shield,
-    href: '/dashboard/notifications',
-    match: /^\/dashboard\/notifications(?:\/.*)?$/,
+    label: 'About',
+    icon: Info,
+    href: '/about',
+    match: /^\/about(?:\/.*)?$/,
   },
   {
-    label: 'settings',
-    icon: Settings,
-    href: '/dashboard/profile',
-    match: /^\/dashboard\/profile(?:\/.*)?$/,
+    label: 'Contact',
+    icon: Mail,
+    href: '/contact',
+    match: /^\/contact(?:\/.*)?$/,
+  },
+  {
+    label: 'Dashboard',
+    icon: LayoutDashboard,
+    href: '/organizer/dashboard',
+    match: /^\/organizer(?:\/.*)?$/,
   },
 ];
 

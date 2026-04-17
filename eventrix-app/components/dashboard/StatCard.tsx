@@ -11,10 +11,15 @@ export function StatCard({
   className?: string;
 }) {
   return (
-    <Card className={cn("border-gray-200 bg-white/70 dark:border-gray-800 dark:bg-gray-950/40", className)}>
+    <Card
+      className={cn(
+        "gap-0 border-slate-200/90 bg-white/90 py-0 shadow-sm dark:border-slate-800 dark:bg-slate-900/70",
+        className,
+      )}
+    >
       <CardContent className="px-6 py-5">
-        <div className="text-sm text-gray-600 dark:text-gray-300">{label}</div>
-        <div className="mt-2 text-2xl font-semibold text-gray-900 dark:text-gray-100">{value}</div>
+        <div className="text-sm font-medium text-slate-600 dark:text-slate-300">{label}</div>
+        <div className="mt-2 text-3xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">{value}</div>
       </CardContent>
     </Card>
   );

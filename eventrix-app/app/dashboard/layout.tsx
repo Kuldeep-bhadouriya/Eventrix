@@ -30,11 +30,16 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="min-h-screen">
-      <div className="flex min-h-screen">
+    <div className="relative min-h-screen bg-slate-50 dark:bg-slate-950">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(100,116,139,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(100,116,139,0.08)_1px,transparent_1px)] bg-[size:36px_36px] opacity-40 dark:opacity-20"
+      />
+
+      <div className="relative flex min-h-screen">
         {/* Desktop sidebar */}
-        <aside className="hidden w-64 lg:block">
-          <DashboardSidebar />
+        <aside className="hidden w-72 shrink-0 border-r border-slate-200/80 bg-white/85 backdrop-blur dark:border-slate-800 dark:bg-slate-900/70 lg:block">
+          <DashboardSidebar className="sticky top-0 h-screen border-r-0" />
         </aside>
 
         <div className="flex min-w-0 flex-1 flex-col">
@@ -42,7 +47,7 @@ export default async function DashboardLayout({
           <DashboardHeader unreadCount={unreadCount} className="pt-16 md:pt-14" />
 
           {/* Content */}
-          <main className="min-w-0 flex-1 px-4 py-6 lg:px-8">
+          <main className="min-w-0 flex-1 px-4 py-6 md:px-6 lg:px-10 lg:py-8">
             {children}
           </main>
         </div>

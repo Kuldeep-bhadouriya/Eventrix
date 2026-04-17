@@ -61,15 +61,17 @@ export function CertificateGrid({ certificates }: { certificates: CertificateLis
 
   return (
     <div className="space-y-4">
-      <CertificateFilter
-        search={search}
-        onSearchChange={setSearch}
-        category={category}
-        categories={categories}
-        onCategoryChange={setCategory}
-        sort={sort}
-        onSortChange={setSort}
-      />
+      <div className="rounded-2xl border border-slate-200/90 bg-white/85 p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900/70">
+        <CertificateFilter
+          search={search}
+          onSearchChange={setSearch}
+          category={category}
+          categories={categories}
+          onCategoryChange={setCategory}
+          sort={sort}
+          onSortChange={setSort}
+        />
+      </div>
 
       {filtered.length === 0 ? (
         <EmptyState title="No matches" description="Try adjusting your search or filters." />

@@ -17,11 +17,11 @@ export function ProfileForm({ profile }: { profile: UserProfile }) {
 
   return (
     <div className="space-y-6">
-      <div className="rounded-xl border border-gray-200 bg-white/60 p-4 dark:border-gray-800 dark:bg-gray-950/40">
+      <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900/70">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div>
-            <div className="text-sm font-semibold text-gray-900 dark:text-gray-100">Personal info</div>
-            <div className="mt-1 text-xs text-gray-600 dark:text-gray-300">
+            <div className="text-sm font-semibold text-slate-900 dark:text-slate-100">Personal info</div>
+            <div className="mt-1 text-xs text-slate-600 dark:text-slate-300">
               Email {form.emailVerified ? "verified" : "not verified"}
             </div>
           </div>
@@ -36,26 +36,26 @@ export function ProfileForm({ profile }: { profile: UserProfile }) {
             />
           </div>
           <div>
-            <label className="text-xs font-medium text-gray-600 dark:text-gray-300">Name</label>
+            <label className="text-xs font-medium text-slate-600 dark:text-slate-300">Name</label>
             <Input value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} />
           </div>
           <div>
-            <label className="text-xs font-medium text-gray-600 dark:text-gray-300">Phone</label>
+            <label className="text-xs font-medium text-slate-600 dark:text-slate-300">Phone</label>
             <Input value={form.phone ?? ""} onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value || null }))} />
           </div>
           <div>
-            <label className="text-xs font-medium text-gray-600 dark:text-gray-300">Roll number</label>
+            <label className="text-xs font-medium text-slate-600 dark:text-slate-300">Roll number</label>
             <Input
               value={form.collegeRollNumber ?? ""}
               onChange={(e) => setForm((f) => ({ ...f, collegeRollNumber: e.target.value || null }))}
             />
           </div>
           <div>
-            <label className="text-xs font-medium text-gray-600 dark:text-gray-300">Semester</label>
+            <label className="text-xs font-medium text-slate-600 dark:text-slate-300">Semester</label>
             <Input value={form.semester ?? ""} onChange={(e) => setForm((f) => ({ ...f, semester: e.target.value || null }))} />
           </div>
           <div className="sm:col-span-2">
-            <label className="text-xs font-medium text-gray-600 dark:text-gray-300">Department</label>
+            <label className="text-xs font-medium text-slate-600 dark:text-slate-300">Department</label>
             <Input
               value={form.department ?? ""}
               onChange={(e) => setForm((f) => ({ ...f, department: e.target.value || null }))}
@@ -63,7 +63,7 @@ export function ProfileForm({ profile }: { profile: UserProfile }) {
           </div>
         </div>
 
-        {message ? <div className="mt-3 text-sm text-gray-700 dark:text-gray-200">{message}</div> : null}
+        {message ? <div className="mt-3 text-sm text-slate-700 dark:text-slate-200">{message}</div> : null}
 
         <div className="mt-4 flex justify-end">
           <Button
@@ -99,12 +99,12 @@ export function ProfileForm({ profile }: { profile: UserProfile }) {
         </div>
       </div>
 
-      <div className="rounded-xl border border-gray-200 bg-white/60 p-4 dark:border-gray-800 dark:bg-gray-950/40">
+      <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900/70">
         <NotificationPreferences />
       </div>
 
-      <div className="rounded-xl border border-gray-200 bg-white/60 p-4 dark:border-gray-800 dark:bg-gray-950/40">
-        <div className="text-sm font-semibold text-gray-900 dark:text-gray-100">Danger zone</div>
+      <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900/70">
+        <div className="text-sm font-semibold text-slate-900 dark:text-slate-100">Danger zone</div>
         <div className="mt-3">
           <DeleteAccountModal />
         </div>

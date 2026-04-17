@@ -6,6 +6,7 @@ import { authOptions } from "@/lib/auth";
 import { getUserProfile } from "@/lib/dashboard/profile-queries";
 import { EmptyState } from "@/components/dashboard/EmptyState";
 import { ProfileForm } from "@/components/dashboard/profile/ProfileForm";
+import { DashboardPageHeader } from "@/components/dashboard/DashboardPageHeader";
 
 export const metadata: Metadata = {
   title: "Profile",
@@ -19,19 +20,27 @@ export default async function ProfilePage() {
 
   if (!profile) {
     return (
-      <EmptyState
-        title="Profile unavailable"
-        description="Database is not configured, or profile could not be loaded."
-      />
+      <div className="space-y-4">
+        <DashboardPageHeader
+          eyebrow="Account"
+          title="Profile"
+          description="Manage your personal details and notification preferences."
+        />
+        <EmptyState
+          title="Profile unavailable"
+          description="Database is not configured, or profile could not be loaded."
+        />
+      </div>
     );
   }
 
   return (
     <div className="space-y-4">
-      <div>
-        <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">Profile</h1>
-        <p className="mt-1 text-sm text-gray-600 dark:text-gray-300">Manage your account and preferences.</p>
-      </div>
+      <DashboardPageHeader
+        eyebrow="Account"
+        title="Profile"
+        description="Keep your account details up to date and control how you receive updates."
+      />
 
       <ProfileForm profile={profile} />
     </div>

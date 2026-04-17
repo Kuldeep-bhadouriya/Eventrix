@@ -19,11 +19,11 @@ export function DashboardHeader({
   return (
     <header
       className={cn(
-        "sticky top-0 z-40 w-full border-b border-gray-200 bg-white/70 backdrop-blur dark:border-gray-800 dark:bg-gray-950/60",
+        "sticky top-0 z-40 w-full border-b border-slate-200/80 bg-white/85 backdrop-blur dark:border-slate-800 dark:bg-slate-950/80",
         className,
       )}
     >
-      <div className="flex items-center justify-between gap-3 px-4 py-3">
+      <div className="flex items-center justify-between gap-3 px-4 py-3 md:px-6 lg:px-8">
         <div className="flex min-w-0 items-center gap-2">
           <MobileMenu />
           <Breadcrumbs className="min-w-0" />
@@ -32,9 +32,7 @@ export function DashboardHeader({
         <div className="flex items-center gap-1">
           <NotificationBell unreadCount={unreadCount} />
           <UserMenu
-            name={isLoading ? "Loading..." : (user?.name ?? null)}
-            email={user?.email ?? null}
-            imageUrl={user?.avatar ?? null}
+            email={isLoading ? "Loading..." : (user?.email ?? null)}
           />
         </div>
       </div>

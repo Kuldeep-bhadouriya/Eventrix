@@ -16,15 +16,15 @@ export function DashboardSection({
   return (
     <section className={cn("space-y-4", className)}>
       {(title || description || action) && (
-        <div className="flex flex-wrap items-start justify-between gap-2">
+        <div className="flex flex-wrap items-start justify-between gap-3">
           <div className="min-w-0">
             {title && (
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+              <h2 className="text-lg font-semibold tracking-tight text-slate-900 dark:text-slate-100">
                 {title}
               </h2>
             )}
             {description && (
-              <p className="text-sm text-gray-600 dark:text-gray-300">{description}</p>
+              <p className="text-sm text-slate-600 dark:text-slate-300">{description}</p>
             )}
           </div>
           {action && <div className="shrink-0">{action}</div>}

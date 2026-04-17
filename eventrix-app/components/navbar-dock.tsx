@@ -21,19 +21,15 @@ import { useMemo, useState, useRef, useEffect } from 'react';
 import { signOut } from 'next-auth/react';
 import { createPortal } from 'react-dom';
 
-// Helper function to get user initials
-function getInitials(name?: string | null): string {
-  if (!name) return 'U';
-  const parts = name.trim().split(' ');
-  if (parts.length >= 2) {
-    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
-  }
-  return name.substring(0, 2).toUpperCase();
+function getInitialsFromEmail(email?: string | null): string {
+  const localPart = email?.split('@')[0]?.trim() ?? '';
+  const cleaned = localPart.replace(/[^a-zA-Z0-9]/g, '');
+  if (!cleaned) return 'U';
+  return cleaned.slice(0, 2).toUpperCase();
 }
 
 type DockUser = {
-  avatar?: string | null;
-  name?: string | null;
+  email?: string | null;
 } | null | undefined;
 
 function ProfileButton({
@@ -76,30 +72,17 @@ function ProfileButton({
         <button 
           ref={buttonRef}
           onClick={() => setDropdownOpen(!dropdownOpen)}
-          className='focus:outline-none'
+          className='inline-flex items-center justify-center rounded-full border-0 bg-transparent p-0 text-inherit appearance-none focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500/70 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-950'
+          aria-label='Open profile menu'
+          aria-expanded={dropdownOpen}
+          aria-haspopup='menu'
         >
-          <DockItem className='aspect-square rounded-full bg-gray-200 dark:bg-neutral-800 w-12 h-12'>
+          <DockItem className='aspect-square rounded-full bg-gray-200 dark:bg-neutral-800'>
             <DockLabel>Profile</DockLabel>
             <DockIcon>
-              {user.avatar ? (
-                <img 
-                  src={user.avatar} 
-                  alt={user.name || 'User'} 
-                  className='h-full w-full object-cover rounded-full scale-150'
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.style.display = 'none';
-                    const parent = target.parentElement;
-                    if (parent) {
-                      parent.innerHTML = `<div class="h-full w-full flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600 text-white font-semibold text-lg scale-150">${getInitials(user.name)}</div>`;
-                    }
-                  }}
-                />
-              ) : (
-                <div className='h-full w-full flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600 text-white font-semibold text-lg scale-150'>
-                  {getInitials(user.name)}
-                </div>
-              )}
+              <div className='aspect-square w-full flex items-center justify-center rounded-full bg-gradient-to-br from-sky-500 to-indigo-500 text-white font-semibold text-sm leading-none'>
+                {getInitialsFromEmail(user.email)}
+              </div>
             </DockIcon>
           </DockItem>
         </button>

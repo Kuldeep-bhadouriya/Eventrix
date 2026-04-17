@@ -9,25 +9,25 @@ export function QuickActions() {
     <DashboardCard
       title="Quick Actions"
       description="Common things you might want to do"
-      className="border-gray-200 bg-white/70 dark:border-gray-800 dark:bg-gray-950/40"
+      className="border-slate-200/90 bg-white/90 dark:border-slate-800 dark:bg-slate-900/70"
     >
-      <div className="flex flex-col gap-2 sm:flex-row">
-        <Button asChild variant="secondary" className="justify-start">
+      <div className="flex flex-col gap-2">
+        <Button asChild variant="outline" className="justify-start">
           <Link href="/events">
             <Compass className="h-4 w-4" />
             Browse Events
           </Link>
         </Button>
 
-        <Button asChild variant="secondary" className="justify-start">
+        <Button asChild variant="outline" className="justify-start">
           <Link href="/dashboard/certificates">
             <Award className="h-4 w-4" />
             Download Certificate
           </Link>
         </Button>
 
-        <Button asChild variant="secondary" className="justify-start">
-          <Link href="/dashboard/my-events">
+        <Button asChild variant="outline" className="justify-start">
+          <Link href="/dashboard/events">
             <CalendarDays className="h-4 w-4" />
             View All Events
           </Link>

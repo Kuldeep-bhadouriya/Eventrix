@@ -17,7 +17,11 @@ export function EventTabs({
   onChange: (value: RegistrationTab) => void;
 }) {
   return (
-    <div className="inline-flex rounded-lg border border-gray-200 p-1 dark:border-gray-800" role="tablist" aria-label="Event filters">
+    <div
+      className="inline-flex rounded-xl border border-slate-200 bg-slate-50 p-1 dark:border-slate-700 dark:bg-slate-900"
+      role="tablist"
+      aria-label="Event filters"
+    >
       {tabs.map((tab) => (
         <button
           key={tab.value}
@@ -28,8 +32,8 @@ export function EventTabs({
           className={cn(
             "rounded-md px-3 py-1.5 text-sm font-medium transition",
             value === tab.value
-              ? "bg-gray-900 text-white dark:bg-gray-100 dark:text-gray-900"
-              : "text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-900",
+              ? "bg-slate-900 text-white shadow-sm dark:bg-slate-100 dark:text-slate-900"
+              : "text-slate-700 hover:bg-slate-200 dark:text-slate-300 dark:hover:bg-slate-800",
           )}
         >
           {tab.label}

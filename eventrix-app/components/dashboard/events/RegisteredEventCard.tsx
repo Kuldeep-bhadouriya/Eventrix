@@ -30,8 +30,8 @@ export function RegisteredEventCard({
   const isCancelled = item.registrationStatus === "CANCELLED";
 
   return (
-    <article className="overflow-hidden rounded-xl border border-gray-200 bg-white/60 dark:border-gray-800 dark:bg-gray-950/40">
-      <div className="relative h-40 w-full overflow-hidden border-b border-gray-200 dark:border-gray-800">
+    <article className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white/90 shadow-sm dark:border-slate-800 dark:bg-slate-900/70">
+      <div className="relative h-40 w-full overflow-hidden border-b border-slate-200 dark:border-slate-800">
         {item.event.bannerUrl ? (
           <div
             role="img"
@@ -53,21 +53,21 @@ export function RegisteredEventCard({
 
       <div className="space-y-3 p-4">
         <div>
-          <h2 className="line-clamp-2 text-base font-semibold text-gray-900 dark:text-gray-100">{item.event.title}</h2>
-          <p className="mt-1 line-clamp-2 text-sm text-gray-600 dark:text-gray-300">{item.event.description}</p>
+          <h2 className="line-clamp-2 text-base font-semibold text-slate-900 dark:text-slate-100">{item.event.title}</h2>
+          <p className="mt-1 line-clamp-2 text-sm text-slate-600 dark:text-slate-300">{item.event.description}</p>
         </div>
 
-        <div className="grid gap-2 text-sm text-gray-700 dark:text-gray-200">
+        <div className="grid gap-2 text-sm text-slate-700 dark:text-slate-200">
           <div className="flex items-center gap-2">
-            <CalendarDays className="h-4 w-4 text-gray-500" />
+            <CalendarDays className="h-4 w-4 text-slate-500" />
             <span>{formattedDate}</span>
           </div>
           <div className="flex items-center gap-2">
-            <Clock3 className="h-4 w-4 text-gray-500" />
+            <Clock3 className="h-4 w-4 text-slate-500" />
             <span>{item.event.time}</span>
           </div>
           <div className="flex items-center gap-2">
-            <MapPin className="h-4 w-4 text-gray-500" />
+            <MapPin className="h-4 w-4 text-slate-500" />
             <span>{item.event.venue}</span>
           </div>
         </div>

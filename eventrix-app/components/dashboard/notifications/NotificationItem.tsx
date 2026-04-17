@@ -13,19 +13,19 @@ export function NotificationItem({
   onDelete: () => void;
 }) {
   return (
-    <div className="rounded-xl border border-gray-200 bg-white/60 p-4 dark:border-gray-800 dark:bg-gray-950/40">
+    <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900/70">
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div className="min-w-0">
           <div className="flex items-center gap-2">
-            <div className="text-sm font-semibold text-gray-900 dark:text-gray-100">{item.title}</div>
+            <div className="text-sm font-semibold text-slate-900 dark:text-slate-100">{item.title}</div>
             {!item.read ? (
-              <span className="rounded-full bg-gray-900 px-2 py-0.5 text-xs text-white dark:bg-gray-100 dark:text-gray-900">
+              <span className="rounded-full bg-slate-900 px-2 py-0.5 text-xs text-white dark:bg-slate-100 dark:text-slate-900">
                 Unread
               </span>
             ) : null}
           </div>
-          <div className="mt-1 text-sm text-gray-700 dark:text-gray-200">{item.message}</div>
-          <div className="mt-2 text-xs text-gray-600 dark:text-gray-300">
+          <div className="mt-1 text-sm text-slate-700 dark:text-slate-200">{item.message}</div>
+          <div className="mt-2 text-xs text-slate-600 dark:text-slate-300">
             {new Date(item.createdAt).toLocaleString()} • {item.type}
           </div>
         </div>

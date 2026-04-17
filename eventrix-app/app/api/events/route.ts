@@ -4,16 +4,14 @@ import {
   paginatedResponse,
   parsePagination,
 } from '@/lib/api';
-import { EventStatus, EventCategory } from '@/types/events';
-import { getMockEvents } from '@/lib/events/mock-events';
-import { eventSchema } from '@/lib/events/event-schemas';
-
-// Shared mock data used across event endpoints
-const mockEvents = getMockEvents();
+import { EventStatus as PrismaEventStatus } from '@prisma/client';
+import { EventCategory } from '@/types/events';
+import { prisma } from '@/lib/db';
+import type { Prisma } from '@prisma/client';
 
 /**
  * GET /api/events
- * Fetch events with filtering, sorting, and pagination
+ * Fetch events with filtering, sorting, and pagination from the database
  */
 export async function GET(request: NextRequest) {
   try {
@@ -22,7 +20,7 @@ export async function GET(request: NextRequest) {
     // Parse query parameters
     const search = searchParams.get('search') || '';
     const category = searchParams.get('category') as EventCategory | null;
-    const status = searchParams.get('status') as EventStatus | null;
+    const status = searchParams.get('status') as string | null;
     const dateFrom = searchParams.get('dateFrom');
     const dateTo = searchParams.get('dateTo');
     const sort = (searchParams.get('sort') || 'date') as 'date' | 'popularity' | 'capacity' | 'createdAt';
@@ -31,80 +29,91 @@ export async function GET(request: NextRequest) {
     // Parse pagination
     const { page, limit, skip } = parsePagination(searchParams);
 
-    // Filter events
-    let filteredEvents = mockEvents;
+    // Build where clause for database query
+    const where: Prisma.EventWhereInput = {
+      AND: [
+        // Search filter
+        search ? {
+          OR: [
+            { title: { contains: search, mode: 'insensitive' } },
+            { description: { contains: search, mode: 'insensitive' } },
+            { venue: { contains: search, mode: 'insensitive' } },
+          ],
+        } : {},
+        // Category filter
+        category ? { category } : {},
+        // Status filter - default to PUBLISHED if not specified
+        status ? { status: status as PrismaEventStatus } : { status: PrismaEventStatus.PUBLISHED },
+        // Date range filters
+        dateFrom ? { date: { gte: new Date(dateFrom) } } : {},
+        dateTo ? { date: { lte: new Date(dateTo) } } : {},
+      ],
+    };
 
-    // Search filter
-    if (search) {
-      const searchLower = search.toLowerCase();
-      filteredEvents = filteredEvents.filter(
-        (event) =>
-          event.title.toLowerCase().includes(searchLower) ||
-          event.description.toLowerCase().includes(searchLower) ||
-          event.venue.toLowerCase().includes(searchLower)
-      );
+    // Build orderBy clause
+    let orderBy: Prisma.EventOrderByWithRelationInput = {};
+    switch (sort) {
+      case 'date':
+        orderBy = { date: order as 'asc' | 'desc' };
+        break;
+      case 'popularity':
+        orderBy = { registeredCount: order as 'asc' | 'desc' };
+        break;
+      case 'capacity':
+        orderBy = { capacity: order as 'asc' | 'desc' };
+        break;
+      case 'createdAt':
+        orderBy = { createdAt: order as 'asc' | 'desc' };
+        break;
     }
 
-    // Category filter
-    if (category) {
-      filteredEvents = filteredEvents.filter((event) => event.category === category);
-    }
+    // Fetch events from database
+    const [events, total] = await Promise.all([
+      prisma.event.findMany({
+        where,
+        include: {
+          organizer: {
+            select: {
+              id: true,
+              organizationName: true,
+              logo: true,
+            },
+          },
+        },
+        orderBy,
+        skip,
+        take: limit,
+      }),
+      prisma.event.count({ where }),
+    ]);
 
-    // Status filter
-    if (status) {
-      filteredEvents = filteredEvents.filter((event) => event.status === status);
-    } else {
-      // By default, only show published events
-      filteredEvents = filteredEvents.filter((event) => event.status === EventStatus.PUBLISHED);
-    }
-
-    // Date range filter
-    if (dateFrom) {
-      const fromDate = new Date(dateFrom);
-      filteredEvents = filteredEvents.filter(
-        (event) => new Date(event.date) >= fromDate
-      );
-    }
-
-    if (dateTo) {
-      const toDate = new Date(dateTo);
-      filteredEvents = filteredEvents.filter(
-        (event) => new Date(event.date) <= toDate
-      );
-    }
-
-    // Sort events
-    filteredEvents.sort((a, b) => {
-      let comparison = 0;
-
-      switch (sort) {
-        case 'date':
-          comparison = new Date(a.date).getTime() - new Date(b.date).getTime();
-          break;
-        case 'popularity':
-          comparison = b.registeredCount - a.registeredCount;
-          break;
-        case 'capacity':
-          const remainingA = a.capacity - a.registeredCount;
-          const remainingB = b.capacity - b.registeredCount;
-          comparison = remainingB - remainingA;
-          break;
-        case 'createdAt':
-          comparison = new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-          break;
-      }
-
-      return order === 'asc' ? comparison : -comparison;
-    });
-
-    // Calculate pagination
-    const total = filteredEvents.length;
-    const paginatedEvents = filteredEvents
-      .slice(skip, skip + limit)
-      .map((item) => eventSchema.parse(item));
+    // Transform database events to match API response format
+    const transformedEvents = events.map((event) => ({
+      id: event.id,
+      title: event.title,
+      description: event.description,
+      date: event.date.toISOString(),
+      time: event.time,
+      endTime: event.endTime,
+      venue: event.venue,
+      capacity: event.capacity,
+      registeredCount: event.registeredCount,
+      organizerId: event.organizerId,
+      organizer: event.organizer ? {
+        id: event.organizer.id,
+        organizationName: event.organizer.organizationName,
+        logo: event.organizer.logo,
+      } : undefined,
+      category: event.category,
+      tags: event.tags,
+      bannerUrl: event.bannerUrl,
+      status: event.status,
+      createdAt: event.createdAt.toISOString(),
+      updatedAt: event.updatedAt.toISOString(),
+    }));
 
     // Return paginated response
-    return paginatedResponse(paginatedEvents, page, limit, total);
+    return paginatedResponse(transformedEvents, page, limit, total);
   } catch (error) {
     console.error('Error fetching events:', error);
     return errorResponse(error);

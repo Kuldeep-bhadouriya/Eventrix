@@ -15,7 +15,7 @@ export function UpcomingEventsWidget({
     <DashboardCard
       title="Upcoming Events"
       description="Your next registered events"
-      className="border-gray-200 bg-white/70 dark:border-gray-800 dark:bg-gray-950/40"
+      className="border-slate-200/90 bg-white/90 dark:border-slate-800 dark:bg-slate-900/70"
     >
       {events.length === 0 ? (
         <EmptyState
@@ -28,14 +28,14 @@ export function UpcomingEventsWidget({
           }
         />
       ) : (
-        <div className="divide-y divide-gray-200 dark:divide-gray-800">
+        <div className="divide-y divide-slate-200/90 dark:divide-slate-800">
           {events.map((event) => (
             <div key={event.id} className="flex items-start justify-between gap-4 py-3">
               <div className="min-w-0">
-                <div className="truncate text-sm font-medium text-gray-900 dark:text-gray-100">
+                <div className="truncate text-sm font-medium text-slate-900 dark:text-slate-100">
                   {event.title}
                 </div>
-                <div className="mt-1 text-xs text-gray-600 dark:text-gray-300">
+                <div className="mt-1 text-xs text-slate-600 dark:text-slate-300">
                   {format(new Date(event.date), "MMM d, yyyy")} • {event.time} • {event.venue}
                 </div>
               </div>

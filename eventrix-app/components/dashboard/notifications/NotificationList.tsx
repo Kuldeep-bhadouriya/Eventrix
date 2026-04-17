@@ -26,7 +26,6 @@ export function NotificationList({ initial }: { initial: Item[] }) {
       refresh().catch(() => undefined);
     }, 15000);
     return () => window.clearInterval(id);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const filtered = useMemo(() => {
@@ -37,7 +36,8 @@ export function NotificationList({ initial }: { initial: Item[] }) {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-2">
+      <div className="rounded-2xl border border-slate-200/90 bg-white/85 p-3 shadow-sm dark:border-slate-800 dark:bg-slate-900/70 sm:p-4">
+        <div className="flex flex-wrap items-center justify-between gap-2">
         <NotificationFilter tab={tab} onTabChange={setTab} />
         <NotificationActions
           busy={busy}
@@ -60,6 +60,7 @@ export function NotificationList({ initial }: { initial: Item[] }) {
             }
           }}
         />
+        </div>
       </div>
 
       {filtered.length === 0 ? (

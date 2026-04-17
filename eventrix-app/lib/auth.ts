@@ -228,8 +228,12 @@ export const authOptions: NextAuthOptions = {
         return true;
       }
 
-      // Enforce Google-only authentication
-      return false;
+      // Allow credentials sign in
+      if (account?.provider === "credentials") {
+        return true;
+      }
+
+      return true;
     },
 
     // Redirect callback - control where users are redirected after sign in

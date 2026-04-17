@@ -94,6 +94,7 @@ export async function proxy(request: NextRequest) {
 
   // Allow static files and Next.js internals
   if (
+    pathname.startsWith("/monitoring") ||
     pathname.startsWith("/_next") ||
     pathname.startsWith("/static") ||
     pathname.startsWith("/favicon") ||
@@ -175,6 +176,6 @@ export const config = {
      * - favicon.ico (favicon file)
      * - public folder
      */
-    "/((?!_next/static|_next/image|favicon.ico|public).*)",
+    "/((?!monitoring|_next/static|_next/image|favicon.ico|public).*)",
   ],
 };

@@ -31,7 +31,10 @@ export const metadata: Metadata = {
   description: "Event management platform for seamless event experiences",
   metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
   icons: {
-    icon: [
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/favicon.svg",
+    other: [
       { url: "/favicon.svg", sizes: "48x48", type: "image/svg+xml" },
       { url: "/favicon.svg", sizes: "64x64", type: "image/svg+xml" },
       { url: "/favicon.svg", sizes: "96x96", type: "image/svg+xml" },

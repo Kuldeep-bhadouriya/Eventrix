@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import { WebGLShader } from "@/components/ui/web-gl-shader";
 import { LiquidButton } from "@/components/ui/liquid-glass-button";
 import { loginSchema, type LoginFormData } from "@/lib/validation-schemas";
+import { getDashboardUrl } from "@/lib/utils-shared";
 
 function LoginForm() {
   const router = useRouter();
@@ -74,7 +75,9 @@ function LoginForm() {
           if (!session.user.profileCompleted) {
             router.push("/auth/complete-profile");
           } else {
-            router.push("/events");
+            // Redirect to appropriate dashboard based on user role
+            const dashboardUrl = getDashboardUrl(session.user.role);
+            router.push(dashboardUrl);
           }
           router.refresh();
         }
@@ -105,7 +108,9 @@ function LoginForm() {
           if (!session.user.profileCompleted) {
             router.push("/auth/complete-profile");
           } else {
-            router.push("/events");
+            // Redirect to appropriate dashboard based on user role
+            const dashboardUrl = getDashboardUrl(session.user.role);
+            router.push(dashboardUrl);
           }
           router.refresh();
         }

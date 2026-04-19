@@ -1,10 +1,19 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import * as THREE from "three"
 
-export function WebGLShader() {
+interface WebGLShaderProps {
+  disableOnMobile?: boolean
+  mobileBreakpoint?: number
+}
+
+export function WebGLShader({
+  disableOnMobile = false,
+  mobileBreakpoint = 768,
+}: WebGLShaderProps = {}) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const [canRenderShader, setCanRenderShader] = useState(!disableOnMobile)
   const sceneRef = useRef<{
     scene: THREE.Scene | null
     camera: THREE.OrthographicCamera | null
@@ -22,7 +31,38 @@ export function WebGLShader() {
   })
 
   useEffect(() => {
-    if (!canvasRef.current) return
+    if (!disableOnMobile) {
+      setCanRenderShader(true)
+      return
+    }
+
+    const mediaQuery = window.matchMedia(
+      `(max-width: ${mobileBreakpoint - 1}px), (prefers-reduced-motion: reduce), (pointer: coarse)`
+    )
+
+    const updateCanRender = () => {
+      setCanRenderShader(!mediaQuery.matches)
+    }
+
+    updateCanRender()
+
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener("change", updateCanRender)
+    } else {
+      mediaQuery.addListener(updateCanRender)
+    }
+
+    return () => {
+      if (mediaQuery.removeEventListener) {
+        mediaQuery.removeEventListener("change", updateCanRender)
+      } else {
+        mediaQuery.removeListener(updateCanRender)
+      }
+    }
+  }, [disableOnMobile, mobileBreakpoint])
+
+  useEffect(() => {
+    if (!canRenderShader || !canvasRef.current) return
 
     const canvas = canvasRef.current
     const { current: refs } = sceneRef
@@ -62,7 +102,7 @@ export function WebGLShader() {
     const initScene = () => {
       refs.scene = new THREE.Scene()
       refs.renderer = new THREE.WebGLRenderer({ canvas })
-      refs.renderer.setPixelRatio(window.devicePixelRatio)
+      refs.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5))
       refs.renderer.setClearColor(new THREE.Color(0x000000))
 
       refs.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, -1)
@@ -113,6 +153,7 @@ export function WebGLShader() {
       if (!refs.renderer || !refs.uniforms) return
       const width = window.innerWidth
       const height = window.innerHeight
+      refs.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5))
       refs.renderer.setSize(width, height, false)
       refs.uniforms.resolution.value = [width, height]
     }
@@ -133,7 +174,11 @@ export function WebGLShader() {
       }
       refs.renderer?.dispose()
     }
-  }, [])
+  }, [canRenderShader])
+
+  if (!canRenderShader) {
+    return null
+  }
 
   return (
     <canvas

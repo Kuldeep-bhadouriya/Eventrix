@@ -235,14 +235,14 @@ export default function AboutPage() {
       </section>
 
       {/* Features Grid */}
-      <section className="relative bg-background/50 backdrop-blur-sm py-16 sm:py-24">
+      <section className="relative bg-background/90 py-16 sm:bg-background/50 sm:py-24 sm:backdrop-blur-sm">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader
             title="Features & Benefits"
             subtitle="Everything you need to manage successful events"
             centered
           />
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
             {features.map((feature, index) => (
               <FeatureCard
                 key={index}

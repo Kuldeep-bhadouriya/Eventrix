@@ -87,24 +87,25 @@ export default function AboutPage() {
   const leads = [
     {
       name: 'Ganesh Sharma',
-      role: 'Male Lead',
-      image: '/assets/team/placeholder-avatar.svg',
+      role: 'Lead',
+      image: '/Team/Ganesh%20Sharma.jpg',
       bio: 'Event lead coordinating planning, execution, and team alignment.',
       social: {
-        github: '#',
-        linkedin: '#',
-        email: 'ganesh@eventrix.com',
+        github: 'https://github.com/ganeshivmi',
+        linkedin: 'https://www.linkedin.com/in/ganeshivmi',
+        email: 'leads@eventrix.co.in',
       },
     },
     {
       name: 'Shrishti Tiwari',
-      role: 'Female Lead',
-      image: '/assets/team/placeholder-avatar.svg',
+      role: 'Lead',
+      image: '/Team/Ms. Shrishti Tiwari.jpg',
       bio: 'Event lead overseeing operations, coordination, and participant experience.',
       social: {
-        github: '#',
-        linkedin: '#',
-        email: 'shrishti@eventrix.com',
+        github: 'https://github.com/shrishtitiwari23',
+        linkedin:
+          'https://www.linkedin.com/in/shrishti-tiwari-ab337a33a?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app',
+        email: 'leads@eventrix.co.in',
       },
     },
   ];
@@ -112,8 +113,8 @@ export default function AboutPage() {
   const incharges = [
     {
       name: 'Kuldeep Bhadouriya',
-      role: 'Lead Developer',
-      image: '/assets/team/placeholder-avatar.svg',
+      role: 'Tech Coordinator',
+      image: '/Team/Kuldeep%20Bhadouriya.jpg',
       bio: 'Full-stack developer passionate about creating seamless event management solutions.',
       social: {
         github: 'https://github.com/Kuldeep-bhadouriya',
@@ -124,45 +125,48 @@ export default function AboutPage() {
     {
       name: 'Aditya Gupta',
       role: 'Setup & Logistic',
-      image: '/assets/team/placeholder-avatar.svg',
+      image: '/Team/Aditya%20Gupta.jpg',
       bio: 'Manages setup planning and on-ground logistics for smooth execution.',
       social: {
-        github: '#',
-        linkedin: '#',
-        email: 'aditya@eventrix.com',
+        github: 'https://github.com/aditya-codes-prog',
+        linkedin:
+          'https://www.linkedin.com/in/aditya-gupta-1264a2375?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app',
+        email: 'setup.logistics@eventrix.co.in',
       },
     },
     {
       name: 'Adarsh Bhadouriya',
       role: 'Volunteer Deployment',
-      image: '/assets/team/placeholder-avatar.svg',
+      image: '/Team/Adarsh%20Bhadouriya.jpg',
       bio: 'Coordinates volunteer allocation, deployment, and task tracking.',
       social: {
-        github: '#',
-        linkedin: '#',
-        email: 'adarsh@eventrix.com',
+        github: 'https://github.com/adarsh-codes-prog',
+        linkedin:
+          'https://www.linkedin.com/in/adarsh-bhadouriya-77b783384?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app',
+        email: 'volunteer.deployment@eventrix.co.in',
       },
     },
     {
       name: 'Anvi Somani',
       role: 'Anchor Operations',
-      image: '/assets/team/placeholder-avatar.svg',
+      image: '/Team/Anvi%20Somani.jpg',
       bio: 'Handles anchor coordination, stage flow, and program operations.',
       social: {
-        github: '#',
-        linkedin: '#',
-        email: 'anvi@eventrix.com',
+        github: 'https://github.com/AnviSomani',
+        linkedin: 'https://www.linkedin.com/in/anvi-somani-0a02a0311',
+        email: 'anchor.operations@eventrix.co.in',
       },
     },
     {
       name: 'Jatin Joshi',
       role: 'Creative Communication',
-      image: '/assets/team/placeholder-avatar.svg',
+      image: '/Team/Jatin%20Joshi.jpg',
       bio: 'Owns creative communication across announcements, content, and messaging.',
       social: {
-        github: '#',
-        linkedin: '#',
-        email: 'jatin@eventrix.com',
+        github: 'https://github.com/Jatin-8180',
+        linkedin:
+          'https://www.linkedin.com/in/jatin-joshi-1b7b70343?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app',
+        email: 'creative.communications@eventrix.co.in',
       },
     },
   ];
